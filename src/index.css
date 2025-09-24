@@ -1,0 +1,5 @@
+*{
+  margin: 0;
+  /*disaliows highlightingb of text on the website*/
+  user-select: none;
+} 
