@@ -8,9 +8,26 @@ import SignUp from "./components/SignUp/SignUp.jsx";
 import Profile from "./components/Profile/Profile.jsx";
 import MovieDetails from "./components/MovieDetails/MovieDetails.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
+import axios from "axios";
 
 function App() {
   const [user, setUser] = useState(null);
+
+  // ✅ Test backend connection once on app load
+  useEffect(() => {
+    const backendURL = "https://moviedb-backend3-production.up.railway.app/";
+
+    const testConnection = async () => {
+      try {
+        const res = await axios.get(backendURL);
+        console.log("✅ Backend connection successful:", res.data);
+      } catch (err) {
+        console.error("❌ Backend connection failed:", err);
+      }
+    };
+
+    testConnection();
+  }, []);
 
   // Load user from localStorage on page refresh
   useEffect(() => {
