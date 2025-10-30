@@ -9,24 +9,25 @@ function Home() {
   const [searchTerm, setSearchTerm] = useState("batman"); // default search
 
   // Fetch movies whenever searchTerm changes
-  useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await fetch(
-          `http://www.omdbapi.com/?apikey=${APIKey}&s=${searchTerm}&type=movie&page=1`
-        );
-        const data = await response.json();
-        if (data.Search) {
-          setMovies(data.Search.slice(0, 10)); // only take first 10
-        } else {
-          setMovies([]); // no results
-        }
-      } catch (err) {
-        console.error("Error fetching movies:", err);
+useEffect(() => {
+  const fetchMovies = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/movies?s=${searchTerm}`
+      );
+      const data = await response.json();
+      if (data.Search) {
+        setMovies(data.Search.slice(0, 10)); // only take first 10
+      } else {
+        setMovies([]);
       }
-    };
-    fetchMovies();
-  }, [searchTerm]);
+    } catch (err) {
+      console.error("Error fetching movies:", err);
+    }
+  };
+  fetchMovies();
+}, [searchTerm]);
+
 
   // Handle form submission
   const handleSearch = (e) => {
