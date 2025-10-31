@@ -35,7 +35,7 @@ function Profile({ user }) {
           <strong>Full Name:</strong> {user.firstName} {user.lastName}
         </p>
         <p>
-          <strong>Username:</strong> {user.username}
+          <strong>Username:</strong> {user.userName}
         </p>
         <p>
           <strong>Email:</strong> {user.email}

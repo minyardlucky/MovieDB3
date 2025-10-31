@@ -2,40 +2,43 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const APIKey = "c8e7394"; // your OMDb API key
-
 function Home() {
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("batman"); // default search
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   // Fetch movies whenever searchTerm changes
-useEffect(() => {
-  const fetchMovies = async () => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/movies?s=${searchTerm}`
-      );
-      const data = await response.json();
-      if (data.Search) {
-        setMovies(data.Search.slice(0, 10)); // only take first 10
-      } else {
+  useEffect(() => {
+    const fetchMovies = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/movies?s=${searchTerm}`
+        );
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(data.message || "Failed to fetch movies");
+        }
+        const data = await response.json();
+        setMovies(data.slice(0, 10) || []); // take first 10
+      } catch (err) {
+        console.error("Error fetching movies:", err);
+        setError(err.message);
         setMovies([]);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Error fetching movies:", err);
-    }
-  };
-  fetchMovies();
-}, [searchTerm]);
-
+    };
+    fetchMovies();
+  }, [searchTerm]);
 
   // Handle form submission
   const handleSearch = (e) => {
     e.preventDefault();
     const input = e.target.elements.movie.value.trim();
-    if (input) {
-      setSearchTerm(input);
-    }
+    if (input) setSearchTerm(input);
   };
 
   return (
@@ -55,62 +58,65 @@ useEffect(() => {
         </button>
       </form>
 
+      {loading && <p>Loading movies...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
       {/* Movie Grid */}
-<div
-  style={{
-    display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)", // 4 across
-    gap: "15px",
-  }}
->
-{movies.length > 0 ? (
-  movies.map((movie) => (
-    <Link
-      key={movie.imdbID}
-      to={`/movie/${movie.imdbID}`}
-      style={{ textDecoration: "none", color: "inherit" }}
-    >
       <div
         style={{
-          border: "1px solid #ccc",
-          borderRadius: "8px",
-          padding: "10px",
-          textAlign: "center",
-          transition: "transform 0.2s, box-shadow 0.2s",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "scale(1.05)";
-          e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "scale(1)";
-          e.currentTarget.style.boxShadow = "none";
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: "15px",
         }}
       >
-        <img
-          src={
-            movie.Poster !== "N/A"
-              ? movie.Poster
-              : "https://via.placeholder.com/150"
-          }
-          alt={movie.Title}
-          style={{
-            width: "100%",
-            height: "250px",
-            objectFit: "cover",
-            borderRadius: "4px",
-          }}
-        />
-        <p style={{ marginTop: "10px", fontWeight: "bold" }}>
-          {movie.Title}
-        </p>
+        {!loading && !error && movies.length > 0 ? (
+          movies.map((movie) => (
+            <Link
+              key={movie.imdbID}
+              to={`/movie/${movie.imdbID}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <div
+                style={{
+                  border: "1px solid #ccc",
+                  borderRadius: "8px",
+                  padding: "10px",
+                  textAlign: "center",
+                  transition: "transform 0.2s, box-shadow 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "scale(1.05)";
+                  e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.2)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                <img
+                  src={
+                    movie.Poster !== "N/A"
+                      ? movie.Poster
+                      : "https://via.placeholder.com/150"
+                  }
+                  alt={movie.Title}
+                  style={{
+                    width: "100%",
+                    height: "250px",
+                    objectFit: "cover",
+                    borderRadius: "4px",
+                  }}
+                />
+                <p style={{ marginTop: "10px", fontWeight: "bold" }}>
+                  {movie.Title}
+                </p>
+              </div>
+            </Link>
+          ))
+        ) : (
+          !loading && <p>No movies found. Try another search.</p>
+        )}
       </div>
-    </Link>
-  ))
-) : (
-  <p>No movies found. Try another search.</p>
-)}
-</div>
     </div>
   );
 }

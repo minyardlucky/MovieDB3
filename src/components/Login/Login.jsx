@@ -3,46 +3,41 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Login({ setUser }) {
-  const [userName, setUserName] = useState("");
-  const [passWord, setPassWord] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
 
-    if (!userName || !passWord) {
+    if (!username || !password) {
       setError("Please enter both username and password.");
       return;
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userName, passWord }),
+        body: JSON.stringify({ userName: username, passWord: password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setUser({
+        const userData = {
           firstName: data.user.firstName,
           lastName: data.user.lastName,
-          username: data.user.userName,
+          userName: data.user.userName,
           email: data.user.email,
-        });
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            firstName: data.user.firstName,
-            lastName: data.user.lastName,
-            username: data.user.userName,
-            email: data.user.email,
-          })
-        );
-        navigate("/");
+        };
+
+        setUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData));
+        navigate("/"); // redirect to home
       } else {
         setError(data.message || "Login failed. Try again.");
       }
@@ -60,8 +55,8 @@ function Login({ setUser }) {
           <label>Username</label>
           <input
             type="text"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             style={{ width: "100%", padding: "8px" }}
           />
         </div>
@@ -70,8 +65,8 @@ function Login({ setUser }) {
           <div style={{ display: "flex" }}>
             <input
               type={showPassword ? "text" : "password"}
-              value={passWord}
-              onChange={(e) => setPassWord(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               style={{ flex: 1, padding: "8px" }}
             />
             <button
@@ -93,3 +88,4 @@ function Login({ setUser }) {
 }
 
 export default Login;
+
