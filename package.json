@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "homepage": "https://minyardlucky.github.io/MovieDB3",
+  "homepage": "https://minyardlucky.github.io/MovieDB3/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
