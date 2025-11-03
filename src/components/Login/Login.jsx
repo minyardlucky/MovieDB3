@@ -19,6 +19,7 @@ function Login({ setUser }) {
     }
 
     try {
+      console.log("BASE URL:", import.meta.env.VITE_API_BASE_URL);
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
