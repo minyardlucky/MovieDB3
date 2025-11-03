@@ -15,7 +15,7 @@ function Home() {
       setError("");
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/movies?s=${searchTerm}`
+          `${import.meta.env.VITE_API_BASE_URL}/api/movies?s=${searchTerm}`
         );
         if (!response.ok) {
           const data = await response.json();
