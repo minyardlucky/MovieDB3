@@ -20,7 +20,7 @@ function SignUp({ setUser }) {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/signup`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ firstName, lastName, userName, email, passWord }),

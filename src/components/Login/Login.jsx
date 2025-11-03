@@ -19,7 +19,7 @@ function Login({ setUser }) {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/login`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userName: username, passWord: password }),
