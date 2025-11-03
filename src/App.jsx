@@ -13,10 +13,11 @@ import axios from "axios";
 function App() {
   const [user, setUser] = useState(null);
 
+  // ✅ Use environment variable for backend URL
+  const backendURL = import.meta.env.VITE_API_BASE_URL;
+
   // ✅ Test backend connection once on app load
   useEffect(() => {
-    const backendURL = "https://moviedb-backend3-production.up.railway.app/";
-
     const testConnection = async () => {
       try {
         const res = await axios.get(backendURL);
@@ -27,9 +28,9 @@ function App() {
     };
 
     testConnection();
-  }, []);
+  }, [backendURL]);
 
-  // Load user from localStorage on page refresh
+  // ✅ Load user from localStorage on page refresh
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
@@ -37,7 +38,7 @@ function App() {
     }
   }, []);
 
-  // Save user to localStorage when it changes
+  // ✅ Save user to localStorage when it changes
   useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
@@ -50,7 +51,7 @@ function App() {
     <Router>
       <Nav user={user} setUser={setUser} />
       <Routes>
-        {/* Protected routes */}
+        {/* ✅ Protected routes */}
         <Route
           path="/"
           element={
@@ -68,7 +69,7 @@ function App() {
           }
         />
 
-        {/* Public routes */}
+        {/* ✅ Public routes */}
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/signup" element={<SignUp setUser={setUser} />} />
         <Route path="/movie/:imdbID" element={<MovieDetails />} />
@@ -78,3 +79,4 @@ function App() {
 }
 
 export default App;
+
