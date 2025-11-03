@@ -3,13 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "homepage": "https://minyardlucky.github.io/MovieDB3/",
   "scripts": {
+    "start": "npm run preview",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview --port $PORT --host"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
