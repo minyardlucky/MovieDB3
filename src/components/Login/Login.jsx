@@ -153,7 +153,7 @@ function Login({ setUser }) {
     // Current Form is Login
     if (isLogin) {
         return (
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-4 w-full"> {/* ADDED w-full here */}
                 {/* Username Input */}
                 <div>
                     <label className="block text-left text-gray-300 mb-1">Username</label>
@@ -169,7 +169,7 @@ function Login({ setUser }) {
                 {/* Password Input */}
                 <div>
                     <label className="block text-left text-gray-300 mb-1">Password</label>
-                    <div className="flex">
+                    <div className="flex w-full"> {/* ADDED w-full here */}
                         <input
                             type={showPassword ? "text" : "password"}
                             value={password}
@@ -199,7 +199,7 @@ function Login({ setUser }) {
     // Current Form is Signup (Placeholder)
     else {
         return (
-            <form onSubmit={handleSignupPlaceholder} className="space-y-4">
+            <form onSubmit={handleSignupPlaceholder} className="space-y-4 w-full"> {/* ADDED w-full here */}
                 <p className="text-gray-400">
                     Your full signup form would go here. For now, click Signup below.
                 </p>
@@ -237,7 +237,8 @@ function Login({ setUser }) {
 
   return (
     <WelcomeMarquee>
-        <div className="p-6 bg-gray-800 rounded-lg shadow-xl border border-yellow-500/50 w-full text-white"> {/* ADDED text-white HERE */}
+        {/* Ensured this inner container spans full width and has visible text colors */}
+        <div className="p-6 bg-gray-800 rounded-lg shadow-xl border border-yellow-500/50 w-full text-white"> 
             <h3 className="text-white text-3xl mb-6 font-bold text-center">
                 {isLogin ? "Customer Login" : "New Account Sign Up"}
             </h3>
