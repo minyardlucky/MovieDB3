@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, BrowserRouter } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom"; 
 
 // --- 1. MARQUEE STYLES (Inline CSS) ---
 const MarqueeStyles = `
@@ -101,13 +101,13 @@ function WelcomeMarquee({ children }) {
 }
 
 // --- 2. MAIN LOGIN COMPONENT LOGIC ---
-function LoginContent({ setUser }) { 
+export default function Login({ setUser }) { 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLogin, setIsLogin] = useState(true); 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate(); // This assumes your parent component provides the Router context.
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -243,13 +243,15 @@ function LoginContent({ setUser }) {
 
   return (
     <WelcomeMarquee>
-        {/* Enforce a maximum width for the form container and center it */}
-        <div className="p-6 bg-gray-800 rounded-lg shadow-xl border border-yellow-500/50 w-full max-w-md text-white"> 
+        {/* Outer container ensures the form block itself is centered and sized correctly */}
+        <div className="p-6 bg-gray-800 rounded-lg shadow-xl border border-yellow-500/50 w-full max-w-sm mx-auto text-white"> 
             <h3 className="text-yellow-400 text-3xl mb-6 font-bold text-center">
                 {isLogin ? "Customer Login" : "New Account Sign Up"}
             </h3>
             
-            {renderForm()}
+            <div className="w-full"> {/* Ensure form rendering container takes full width */}
+                {renderForm()}
+            </div>
             
             {error && <p className="text-red-500 text-center mt-4 font-semibold">{error}</p>}
             
@@ -267,22 +269,4 @@ function LoginContent({ setUser }) {
         </div>
     </WelcomeMarquee>
   );
-}
-
-// This wrapper allows the component to be rendered in isolation without crashing
-// while still working when rendered normally by your main application's router.
-export default function Login(props) {
-    // Check if a router context is already present
-    // If not, provide one temporarily for the preview.
-    try {
-        useNavigate(); // Will throw error if outside router
-        return <LoginContent {...props} />; // If hook runs, we are inside a router
-    } catch (e) {
-        // If the hook fails, we are outside a router, so wrap it.
-        return (
-            <BrowserRouter>
-                <LoginContent {...props} />
-            </BrowserRouter>
-        );
-    }
 }
