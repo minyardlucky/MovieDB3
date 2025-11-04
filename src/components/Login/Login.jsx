@@ -102,9 +102,6 @@ function WelcomeMarquee({ children }) {
             <p>
               If you are a returning customer, please log in.
             </p>
-            <p className="text-yellow-400 font-semibold">
-              New to the show? Sign up!
-            </p>
           </div>
           
           {/* Form Content is passed as children */}
@@ -124,13 +121,6 @@ function Login({ setUser }) {
   // --- Login State ---
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  // --- Signup State ---
-  const [signupFirstName, setSignupFirstName] = useState("");
-  const [signupLastName, setSignupLastName] = useState("");
-  const [signupUsername, setSignupUsername] = useState("");
-  const [signupEmail, setSignupEmail] = useState("");
-  const [signupPassword, setSignupPassword] = useState("");
 
   // --- UI State ---
   const [showPassword, setShowPassword] = useState(false);
