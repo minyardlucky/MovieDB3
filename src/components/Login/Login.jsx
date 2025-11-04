@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // --- Marquee Styles (Injected via <style> tag) ---
-// This entire string is injected into the document head to define custom marquee classes.
+// Note: These styles are now applied directly in the return block,
+// but we keep the string here to ensure the necessary CSS is defined.
 const MarqueeStyles = `
   /* Global height fix to center the marquee */
   .center-screen {
@@ -203,13 +204,13 @@ function Login({ setUser }) {
 
   return (
     <>
-      {/* Inject custom styles for the marquee effect */}
+      {/* 1. Inject custom styles into the document head */}
       <style>{MarqueeStyles}</style>
       
-      {/* Outer container for centering and full screen height */}
+      {/* 2. Outer container for centering and full screen height (using custom class) */}
       <div className="flex justify-center items-center center-screen bg-gray-900">
         
-        {/* Inner marquee container with style classes */}
+        {/* 3. Inner marquee container (where the main styles are applied) */}
         <div className="marquee max-w-lg md:max-w-xl text-center">
           
           <h1 className="neon-text text-4xl sm:text-5xl font-bold text-yellow-300 tracking-wider mb-6 leading-tight">
