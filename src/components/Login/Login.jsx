@@ -1,18 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate as useActualNavigate } from "react-router-dom"; 
-
-// --- Router Safety Check ---
-// The component crashes when previewed outside a Router context.
-// We use a mock here to allow previewing, but your main app will use useActualNavigate.
-// FIXED: Typo corrected from useActualActualNavigate to useActualNavigate
-const useNavigate = typeof window !== 'undefined' ? useActualNavigate : () => { 
-    // Return a function that logs navigation attempts instead of crashing
-    return (path) => console.warn(`Navigation attempted to: ${path}. Hook is mocked for isolated view.`);
-};
-
+import { useNavigate, BrowserRouter } from "react-router-dom"; 
 
 // --- 1. MARQUEE STYLES (Inline CSS) ---
 const MarqueeStyles = `
+  /* AGGRESSIVE FIX: Ensure the HTML/Body/Root element takes full viewport height */
+  html, body, #root {
+    height: 100%;
+    margin: 0;
+  }
+  
   /* Marquee container styling */
   .marquee {
     position: relative;
@@ -76,7 +72,8 @@ function WelcomeMarquee({ children }) {
       
       {/* Ensures the marquee is centered vertically and horizontally */}
       <div className="flex justify-center items-center p-8 min-h-screen bg-gray-900">
-        <div className="marquee w-full max-w-lg md:max-w-xl text-center">
+        {/* Increased max-w for better spacing */}
+        <div className="marquee w-full max-w-2xl md:max-w-3xl text-center"> 
           
           <h1 className="neon-text text-4xl sm:text-5xl font-bold text-yellow-300 tracking-wider mb-6 leading-tight">
             WELCOME TO 
@@ -104,7 +101,7 @@ function WelcomeMarquee({ children }) {
 }
 
 // --- 2. MAIN LOGIN COMPONENT LOGIC ---
-function Login({ setUser }) { 
+function LoginContent({ setUser }) { 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -165,7 +162,6 @@ function Login({ setUser }) {
             <form onSubmit={handleLogin} className="space-y-4 w-full"> 
                 {/* Username Input */}
                 <div>
-                    {/* *** FIXED: Explicit yellow text for high contrast *** */}
                     <label className="block text-left text-yellow-400 mb-1 font-bold">Username</label> 
                     <input
                         type="text"
@@ -178,7 +174,6 @@ function Login({ setUser }) {
                 
                 {/* Password Input */}
                 <div>
-                    {/* *** FIXED: Explicit yellow text for high contrast *** */}
                     <label className="block text-left text-yellow-400 mb-1 font-bold">Password</label> 
                     <div className="flex w-full"> 
                         <input
@@ -250,7 +245,6 @@ function Login({ setUser }) {
     <WelcomeMarquee>
         {/* Enforce a maximum width for the form container and center it */}
         <div className="p-6 bg-gray-800 rounded-lg shadow-xl border border-yellow-500/50 w-full max-w-md text-white"> 
-            {/* *** FIXED: Explicit yellow text for high contrast *** */}
             <h3 className="text-yellow-400 text-3xl mb-6 font-bold text-center">
                 {isLogin ? "Customer Login" : "New Account Sign Up"}
             </h3>
@@ -275,4 +269,20 @@ function Login({ setUser }) {
   );
 }
 
-export default Login;
+// This wrapper allows the component to be rendered in isolation without crashing
+// while still working when rendered normally by your main application's router.
+export default function Login(props) {
+    // Check if a router context is already present
+    // If not, provide one temporarily for the preview.
+    try {
+        useNavigate(); // Will throw error if outside router
+        return <LoginContent {...props} />; // If hook runs, we are inside a router
+    } catch (e) {
+        // If the hook fails, we are outside a router, so wrap it.
+        return (
+            <BrowserRouter>
+                <LoginContent {...props} />
+            </BrowserRouter>
+        );
+    }
+}
