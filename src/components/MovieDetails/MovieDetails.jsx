@@ -10,14 +10,12 @@ function MovieDetails() {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(
-          `/api/movies/${imdbID}`
-        );
+        const response = await fetch(`/api/movies/${imdbID}`);
         // Check if the response from your backend was successful
       if (!response.ok) {
         throw new Error(`Backend error: ${response.status}`);
        }
-       
+
         const data = await response.json();
         if (data) {
           setMovie(data);
