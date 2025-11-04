@@ -14,12 +14,14 @@ const getReelStyle = (index) => {
   
   return {
     position: 'absolute',
+    // Position relative to the center of the main container
     top: `calc(50% + ${y}px)`,
     left: `calc(50% + ${x}px)`,
-    transform: 'translate(-50%, -50%)', // Center the reel icon
-    fontSize: '24px', // Size of the reel icon
-    color: '#FFD700', // Gold color for movie reel
-    zIndex: 1, // Keep reels behind the form for a nice effect
+    // Center the reel icon perfectly
+    transform: 'translate(-50%, -50%)', 
+    fontSize: '32px', // Increased size for visibility
+    color: '#9370DB', // Medium Purple color
+    zIndex: 1, // Keep reels behind the form
   };
 };
 
@@ -77,97 +79,118 @@ function SignUp({ setUser }) {
   };
 
   return (
-    // 1. Full-page container for centering and relative positioning
+    // 1. Full-page container for centering, relative positioning, and circle spacing
     <div
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "100vh", // Ensures it takes up full viewport height
-        padding: "20px",
-        position: "relative", // Crucial for positioning the reels absolutely
+        minHeight: "100vh", 
+        // IMPORTANT FIX: Added large padding to prevent the absolutely positioned reels
+        // from being cut off by the container's edges.
+        padding: "300px", 
+        position: "relative",
       }}
     >
       
-      {/* 2. Container for the form to apply a style */}
+      {/* 2. Form Container */}
       <div
         style={{
-          backgroundColor: '#f9f9f9',
-          padding: '20px',
-          borderRadius: '10px',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          backgroundColor: 'white', // Changed to white for better contrast
+          padding: '30px',
+          borderRadius: '12px',
+          boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
           maxWidth: '350px',
           width: '100%',
           zIndex: 2, // Keep the form in front of the reels
         }}
       >
         <h2>Sign Up</h2>
-        <form onSubmit={handleSignUp} style={{}}>
-          <div style={{ marginBottom: "10px" }}>
-            <label>First Name</label>
+        <form onSubmit={handleSignUp}>
+          <div style={{ marginBottom: "15px" }}>
+            <label style={{ display: "block", marginBottom: "5px" }}>First Name</label>
             <input
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              style={{ width: "100%", padding: "8px" }}
+              style={{ width: "100%", padding: "10px", border: "1px solid #ccc", borderRadius: "5px" }}
             />
           </div>
-          <div style={{ marginBottom: "10px" }}>
-            <label>Last Name</label>
+          <div style={{ marginBottom: "15px" }}>
+            <label style={{ display: "block", marginBottom: "5px" }}>Last Name</label>
             <input
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              style={{ width: "100%", padding: "8px" }}
+              style={{ width: "100%", padding: "10px", border: "1px solid #ccc", borderRadius: "5px" }}
             />
           </div>
-          <div style={{ marginBottom: "10px" }}>
-            <label>Username</label>
+          <div style={{ marginBottom: "15px" }}>
+            <label style={{ display: "block", marginBottom: "5px" }}>Username</label>
             <input
               type="text"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
-              style={{ width: "100%", padding: "8px" }}
+              style={{ width: "100%", padding: "10px", border: "1px solid #ccc", borderRadius: "5px" }}
             />
           </div>
-          <div style={{ marginBottom: "10px" }}>
-            <label>Email</label>
+          <div style={{ marginBottom: "15px" }}>
+            <label style={{ display: "block", marginBottom: "5px" }}>Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              style={{ width: "100%", padding: "8px" }}
+              style={{ width: "100%", padding: "10px", border: "1px solid #ccc", borderRadius: "5px" }}
             />
           </div>
-          <div style={{ marginBottom: "10px" }}>
-            <label>Password</label>
+          <div style={{ marginBottom: "20px" }}>
+            <label style={{ display: "block", marginBottom: "5px" }}>Password</label>
             <div style={{ display: "flex" }}>
               <input
                 type={showPassword ? "text" : "password"}
                 value={passWord}
                 onChange={(e) => setPassWord(e.target.value)}
-                style={{ flex: 1, padding: "8px" }}
+                style={{ flex: 1, padding: "10px", border: "1px solid #ccc", borderRadius: "5px 0 0 5px" }}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                style={{ marginLeft: "5px", padding: "8px", cursor: "pointer" }}
+                style={{ 
+                  marginLeft: "0px", 
+                  padding: "10px 15px", 
+                  cursor: "pointer", 
+                  backgroundColor: '#4CAF50', // Green button
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: "0 5px 5px 0"
+                }}
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
           </div>
-          <button type="submit" style={{ padding: "8px 15px", width: "100%" }}>
+          <button 
+            type="submit" 
+            style={{ 
+              padding: "12px 15px", 
+              width: "100%", 
+              backgroundColor: '#007BFF', // Blue submit button
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer'
+            }}
+          >
             Sign Up
           </button>
         </form>
-        {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+        {error && <p style={{ color: "red", marginTop: "15px" }}>{error}</p>}
       </div>
       
-      {/* 3. Movie Reel Icons (using 🎬 emoji) */}
+      {/* 3. Movie Reel Icons (🎞️) */}
       {[...Array(NUM_REELS)].map((_, index) => (
         <div key={index} style={getReelStyle(index)}>
-          🎬
+          🎞️
         </div>
       ))}
       
