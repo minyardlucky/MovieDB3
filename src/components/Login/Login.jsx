@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // --- Marquee Styles (Injected via <style> tag) ---
+// This entire string is injected into the document head to define custom marquee classes.
 const MarqueeStyles = `
   /* Global height fix to center the marquee */
   .center-screen {
@@ -80,42 +81,9 @@ const MarqueeStyles = `
   }
 `;
 
-/**
- * A styled component rendering a classic theater marquee welcome message.
- */
-function WelcomeMarquee({ children }) {
-  return (
-    // Inject custom styles needed for the marquee effect
-    <>
-      <style>{MarqueeStyles}</style>
-      
-      <div className="flex justify-center items-center center-screen bg-gray-200">
-        <div className="marquee max-w-lg md:max-w-xl text-center">
-          
-          <h1 className="neon-text text-4xl sm:text-5xl font-bold text-yellow-300 tracking-wider mb-6 leading-tight">
-            WELCOME TO 
-            <br />
-            LUCKY'S MOVIE CENTER
-          </h1>
-
-          <div className="text-white text-xl sm:text-2xl neon-text font-normal space-y-4 mb-8">
-            <p>
-              If you are a returning customer, please log in.
-            </p>
-          </div>
-          
-          {/* Form Content is passed as children */}
-          {children}
-          
-        </div>
-      </div>
-    </>
-  );
-}
-
 
 function Login({ setUser }) {
-  // --- Login State (Simplified) ---
+  // --- Login State ---
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -124,10 +92,8 @@ function Login({ setUser }) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // --- Navigation (Restored) ---
   const navigate = useNavigate();
   
-  // Adjusted to avoid the import.meta warning in environments targeting older ES versions
   const API_BASE_URL = typeof import.meta.env.VITE_API_BASE_URL !== 'undefined' 
     ? import.meta.env.VITE_API_BASE_URL 
     : '';
@@ -176,8 +142,7 @@ function Login({ setUser }) {
     }
   };
   
-  // All signup-related state, handlers (handleSignup, clearForm, toggleForm) and logic (isLogin) are removed.
-
+  
   const renderLoginForm = () => (
     <div className="p-6 bg-gray-700 rounded-lg shadow-xl border border-yellow-500/50 text-white form-container text-left">
       <h3 className="text-yellow-400 text-2xl mb-4 font-bold text-center">
@@ -237,9 +202,32 @@ function Login({ setUser }) {
   );
 
   return (
-    <WelcomeMarquee>
-      {renderLoginForm()}
-    </WelcomeMarquee>
+    <>
+      {/* Inject custom styles for the marquee effect */}
+      <style>{MarqueeStyles}</style>
+      
+      {/* Outer container for centering and full screen height */}
+      <div className="flex justify-center items-center center-screen bg-gray-900">
+        
+        {/* Inner marquee container with style classes */}
+        <div className="marquee max-w-lg md:max-w-xl text-center">
+          
+          <h1 className="neon-text text-4xl sm:text-5xl font-bold text-yellow-300 tracking-wider mb-6 leading-tight">
+            WELCOME TO 
+            <br />
+            LUCKY'S MOVIE CENTER
+          </h1>
+
+          <div className="text-white text-xl sm:text-2xl neon-text font-normal space-y-4 mb-8">
+            <p>
+              If you are a returning customer, please log in.
+            </p>
+          </div>
+          
+          {renderLoginForm()}
+        </div>
+      </div>
+    </>
   );
 }
 
