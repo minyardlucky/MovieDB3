@@ -1,27 +1,25 @@
 import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom"; // TEMPORARILY REMOVED TO PREVENT CRASHING IN ISOLATION
+import { useNavigate } from "react-router-dom";
 
-// --- 1. MARQUEE STYLES (Inline CSS) ---
+// --- Marquee Styles (Injected via <style> tag) ---
 const MarqueeStyles = `
-  /* AGGRESSIVE FIX: Ensure the HTML/Body/Root element takes full viewport height */
-  html, body, #root {
-    height: 100%;
-    margin: 0;
+  /* Global height fix to center the marquee */
+  .center-screen {
+    min-height: 100vh;
   }
   
-  /* Marquee container styling */
   .marquee {
     position: relative;
-    padding: 3rem 1.5rem;
+    padding: 3rem 2rem;
     border: 12px solid #ffaa00; /* Gold frame border */
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(255, 170, 0, 0.7), 0 0 30px rgba(255, 170, 0, 0.4);
-    background: #333333; /* MEDIUM GRAY MARQUEE BACKGROUND */
+    background: #333333; /* Medium Gray Inside Marquee */
     font-family: 'Georgia', serif; 
     animation: flicker 1s infinite alternate;
+    width: 100%;
   }
   
-  /* Inner light effect */
   .marquee::before {
     content: '';
     position: absolute;
@@ -60,35 +58,39 @@ const MarqueeStyles = `
       0 0 25px #ffaa00,
       0 0 30px #ffaa00;
   }
-
-  /* Specific Form Element Fixes */
-  .login-form-container {
-    width: 350px; /* Explicit width to prevent shrinking */
-    max-width: 100%;
-    margin: 0 auto; /* Center the container */
+  
+  /* Custom CSS to enforce form sizing and block display */
+  .form-container {
+    /* Use !important for high specificity against external overrides */
+    width: 100% !important; 
+    max-width: 380px !important; 
+    margin: 2rem auto 0 auto !important;
+    padding: 1.5rem !important;
   }
   
-  .login-input {
-    width: 100%; /* Ensure inputs take full width of container */
+  .form-label {
+    display: block !important;
+    margin-bottom: 0.25rem;
+    font-weight: bold;
+    color: #facc15; /* yellow-400 */
   }
-
-  .login-label {
-    display: block; /* Ensure labels stack vertically */
+  
+  .form-input {
+    width: 100% !important;
   }
 `;
 
 /**
- * A styled component rendering the marquee welcome message.
+ * A styled component rendering a classic theater marquee welcome message.
  */
 function WelcomeMarquee({ children }) {
   return (
+    // Inject custom styles needed for the marquee effect
     <>
       <style>{MarqueeStyles}</style>
       
-      {/* Changed background from bg-gray-900 to bg-gray-200 */}
-      <div className="flex justify-center items-center p-8 min-h-screen bg-gray-200"> 
-        {/* Increased max-w for better spacing */}
-        <div className="marquee w-full max-w-2xl md:max-w-3xl text-center"> 
+      <div className="flex justify-center items-center center-screen bg-gray-200">
+        <div className="marquee max-w-lg md:max-w-xl text-center">
           
           <h1 className="neon-text text-4xl sm:text-5xl font-bold text-yellow-300 tracking-wider mb-6 leading-tight">
             WELCOME TO 
@@ -105,184 +107,283 @@ function WelcomeMarquee({ children }) {
             </p>
           </div>
           
-          {/* Children (Form/Login Content) is placed here */}
-          <div className="mt-8 flex justify-center w-full"> 
-            {children}
-          </div>
+          {/* Form Content is passed as children */}
+          {children}
+          
         </div>
       </div>
     </>
   );
 }
 
-// --- 2. MAIN LOGIN COMPONENT LOGIC ---
-export default function Login({ setUser }) { 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [isLogin, setIsLogin] = useState(true); 
-  // const navigate = useNavigate(); // REMOVED TO PREVENT CRASH
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError("");
+function Login({ setUser }) {
+  // --- State for Login/Signup Forms ---
+  const [isLogin, setIsLogin] = useState(true);
 
-    if (!username || !password) {
-      setError("Please enter both username and password.");
-      return;
-    }
+  // --- Login State ---
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-    try {
-      console.log("BASE URL:", import.meta.env.VITE_API_BASE_URL);
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userName: username, passWord: password }),
-      });
+  // --- Signup State ---
+  const [signupFirstName, setSignupFirstName] = useState("");
+  const [signupLastName, setSignupLastName] = useState("");
+  const [signupUsername, setSignupUsername] = useState("");
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
 
-      const data = await response.json();
+  // --- UI State ---
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-      if (response.ok) {
-        const userData = {
-          firstName: data.user.firstName,
-          lastName: data.user.lastName,
-          userName: data.user.userName,
-          email: data.user.email,
-        };
+  // --- Navigation (Restored) ---
+  const navigate = useNavigate();
+  
+  // Adjusted to avoid the import.meta warning in environments targeting older ES versions
+  const API_BASE_URL = typeof import.meta.env.VITE_API_BASE_URL !== 'undefined' 
+    ? import.meta.env.VITE_API_BASE_URL 
+    : '';
 
-        setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData)); 
-        // navigate("/"); // REDIRECT IS NOW DISABLED
-      } else {
-        setError(data.message || "Login failed. Try again.");
-      }
-    } catch (err) {
-      console.error("Login error:", err);
-      setError("Something went wrong. Please try again later.");
-    }
-  };
-
-  // Placeholder for Signup function (will only display an error until implemented)
-  const handleSignupPlaceholder = (e) => {
-    e.preventDefault();
-    setError("Signup is currently disabled.");
+  // --- Helper to save user data ---
+  const saveUserDataAndNavigate = (data) => {
+    const userData = {
+      firstName: data.user.firstName,
+      lastName: data.user.lastName,
+      userName: data.user.userName,
+      email: data.user.email,
+    };
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+    navigate("/"); // Redirect to home
   };
 
-  // Helper function to render either Login or Signup form
-  const renderForm = () => {
-    // Current Form is Login
-    if (isLogin) {
-        return (
-            <form onSubmit={handleLogin} className="space-y-4 w-full"> 
-                {/* Username Input */}
-                <div>
-                    <label className="login-label text-left text-yellow-400 mb-1 font-bold">Username</label> 
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        className="login-input p-3 rounded bg-gray-700 text-white placeholder-gray-400 focus:ring-yellow-500 focus:border-yellow-500 transition duration-150"
-                        required
-                    />
-                </div>
-                
-                {/* Password Input */}
-                <div>
-                    <label className="login-label text-left text-yellow-400 mb-1 font-bold">Password</label> 
-                    <div className="flex w-full"> 
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="login-input flex-1 p-3 rounded-l bg-gray-700 text-white placeholder-gray-400 focus:ring-yellow-500 focus:border-yellow-500 transition duration-150"
-                            required
-                        />
-                        <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="p-3 bg-gray-600 text-yellow-400 rounded-r hover:bg-gray-500 transition duration-150"
-                        >
-                            {showPassword ? "Hide" : "Show"}
-                        </button>
-                    </div>
-                </div>
+  // --- Handlers ---
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
 
-                <button 
-                    type="submit" 
-                    className="w-full p-3 bg-yellow-500 text-gray-900 font-bold rounded-lg hover:bg-yellow-600 transition duration-150 shadow-md"
-                >
-                    LOG IN
-                </button>
-            </form>
-        );
-    } 
-    // Current Form is Signup (Placeholder)
-    else {
-        return (
-            <form onSubmit={handleSignupPlaceholder} className="space-y-4 w-full"> 
-                <p className="text-gray-400">
-                    Your full signup form would go here.
-                </p>
-                
-                {/* Placeholder input fields */}
-                <input 
-                    className="login-input p-3 mb-3 rounded bg-gray-700 text-white placeholder-gray-400" 
-                    type="text" 
-                    placeholder="First Name" 
-                    required
-                />
-                <input 
-                    className="login-input p-3 mb-3 rounded bg-gray-700 text-white placeholder-gray-400" 
-                    type="text" 
-                    placeholder="Username" 
-                    required
-                />
-                <input 
-                    className="login-input p-3 mb-4 rounded bg-gray-700 text-white placeholder-gray-400" 
-                    type="password" 
-                    placeholder="Password" 
-                    required
-                />
-                
-                <button 
-                    type="submit" 
-                    className="w-full p-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition duration-150 shadow-md"
-                >
-                    SIGN UP
-                </button>
-            </form>
-        );
+    if (!username || !password) {
+      setError("Please enter both username and password.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/users/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userName: username, passWord: password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        saveUserDataAndNavigate(data);
+      } else {
+        setError(data.message || "Login failed. Invalid credentials.");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Network error. Please try again later.");
     }
   };
 
-  return (
-    <WelcomeMarquee>
-        {/* Outer container ensures the form block itself is centered and sized correctly */}
-        {/* Changed form background to black to contrast with the medium gray marquee background */}
-        <div className="p-6 bg-black rounded-lg shadow-xl border border-yellow-500/50 text-white login-form-container"> 
-            <h3 className="text-yellow-400 text-3xl mb-6 font-bold text-center">
-                {isLogin ? "Customer Login" : "New Account Sign Up"}
-            </h3>
-            
-            <div className="w-full"> {/* Ensure form rendering container takes full width */}
-                {renderForm()}
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    // Basic validation
+    if (!signupUsername || !signupPassword || !signupEmail) {
+      setError("Please fill out all required fields.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/users/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          firstName: signupFirstName,
+          lastName: signupLastName,
+          userName: signupUsername, 
+          email: signupEmail, 
+          passWord: signupPassword 
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccess("Account created successfully! Redirecting to login...");
+        
+        // Save user data and navigate (optional, can be removed if you want them to manually log in)
+        saveUserDataAndNavigate(data);
+
+      } else {
+        // Displays the E11000 duplicate key error message from backend
+        setError(data.message || "Signup failed. Please check your information.");
+      }
+    } catch (err) {
+      console.error("Signup error:", err);
+      setError("Network error. Please try again later.");
+    }
+  };
+  
+  const clearForm = () => {
+      setError("");
+      setSuccess("");
+      setUsername("");
+      setPassword("");
+      setSignupUsername("");
+      setSignupPassword("");
+      setSignupEmail("");
+      setSignupFirstName("");
+      setSignupLastName("");
+  };
+
+  const toggleForm = () => {
+      clearForm();
+      setIsLogin(!isLogin);
+  };
+
+
+  const renderForm = () => (
+    <div className="p-6 bg-gray-700 rounded-lg shadow-xl border border-yellow-500/50 text-white form-container text-left">
+      <h3 className="text-yellow-400 text-2xl mb-4 font-bold text-center">
+        {isLogin ? "Customer Login" : "New Account Sign Up"}
+      </h3>
+      
+      {/* Success/Error Messages */}
+      {success && (
+          <p className="p-3 mb-4 rounded bg-green-500 text-white font-bold text-sm">
+              {success}
+          </p>
+      )}
+      {error && (
+          <p className="p-3 mb-4 rounded bg-red-600 text-white font-bold text-sm">
+              {error}
+          </p>
+      )}
+
+      {/* Login Form */}
+      {isLogin ? (
+        <form onSubmit={handleLogin}>
+          <div className="mb-4">
+            <label className="form-label">Username</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="form-input p-3 rounded bg-gray-800 text-white placeholder-gray-400 focus:ring-yellow-500 focus:border-yellow-500 border border-gray-600"
+              placeholder="Your Username"
+              required
+            />
+          </div>
+          <div className="mb-6">
+            <label className="form-label">Password</label>
+            <div className="flex">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="form-input p-3 rounded-l bg-gray-800 text-white placeholder-gray-400 focus:ring-yellow-500 focus:border-yellow-500 border border-gray-600 border-r-0"
+                placeholder="Password"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="p-3 bg-gray-600 text-xs text-white font-bold rounded-r hover:bg-gray-500 transition duration-150"
+              >
+                {showPassword ? "HIDE" : "SHOW"}
+              </button>
             </div>
-            
-            {error && <p className="text-red-500 text-center mt-4 font-semibold">{error}</p>}
-            
-            <button 
-                onClick={() => {
-                    setIsLogin(!isLogin);
-                    setError(''); // Clear error on toggle
-                    setUsername(''); // Clear fields on toggle
-                    setPassword('');
-                }}
-                className="w-full mt-6 text-sm text-yellow-400 hover:text-yellow-300 transition duration-150"
-            >
-                {isLogin ? "Need an account? Sign Up!" : "Already have an account? Log In!"}
-            </button>
-        </div>
+          </div>
+          <button type="submit" className="w-full p-3 bg-yellow-500 text-gray-900 font-bold rounded-lg hover:bg-yellow-600 transition duration-150 shadow-md">
+            LOG IN
+          </button>
+        </form>
+      ) : (
+        /* Signup Form */
+        <form onSubmit={handleSignup}>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label className="form-label">First Name</label>
+              <input
+                type="text"
+                value={signupFirstName}
+                onChange={(e) => setSignupFirstName(e.target.value)}
+                className="form-input p-3 rounded bg-gray-800 text-white placeholder-gray-400 border border-gray-600"
+                placeholder="First Name"
+              />
+            </div>
+            <div>
+              <label className="form-label">Last Name</label>
+              <input
+                type="text"
+                value={signupLastName}
+                onChange={(e) => setSignupLastName(e.target.value)}
+                className="form-input p-3 rounded bg-gray-800 text-white placeholder-gray-400 border border-gray-600"
+                placeholder="Last Name"
+              />
+            </div>
+          </div>
+          <div className="mb-4">
+            <label className="form-label">Username</label>
+            <input
+              type="text"
+              value={signupUsername}
+              onChange={(e) => setSignupUsername(e.target.value)}
+              className="form-input p-3 rounded bg-gray-800 text-white placeholder-gray-400 border border-gray-600"
+              placeholder="Username"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="form-label">Email</label>
+            <input
+              type="email"
+              value={signupEmail}
+              onChange={(e) => setSignupEmail(e.target.value)}
+              className="form-input p-3 rounded bg-gray-800 text-white placeholder-gray-400 border border-gray-600"
+              placeholder="Email"
+              required
+            />
+          </div>
+          <div className="mb-6">
+            <label className="form-label">Password</label>
+            <input
+              type="password"
+              value={signupPassword}
+              onChange={(e) => setSignupPassword(e.target.value)}
+              className="form-input p-3 rounded bg-gray-800 text-white placeholder-gray-400 border border-gray-600"
+              placeholder="Password"
+              required
+            />
+          </div>
+          <button type="submit" className="w-full p-3 bg-yellow-500 text-gray-900 font-bold rounded-lg hover:bg-yellow-600 transition duration-150 shadow-md">
+            SIGN UP
+          </button>
+        </form>
+      )}
+
+      {/* Form Toggle Button */}
+      <button 
+        onClick={toggleForm}
+        className="mt-6 w-full text-center text-sm text-yellow-400 hover:text-yellow-300 transition duration-150"
+      >
+        {isLogin ? "Need an account? Sign Up!" : "Already have an account? Log In!"}
+      </button>
+    </div>
+  );
+
+  return (
+    <WelcomeMarquee>
+      {renderForm()}
     </WelcomeMarquee>
-  );
+  );
 }
+
+export default Login;
