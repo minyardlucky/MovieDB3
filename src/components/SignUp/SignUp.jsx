@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Constants for the circle effect
-const NUM_REELS = 8; // Number of movie reels
-const RADIUS = 200; // Radius of the circle (in pixels)
+// Increased number of reels for a "chain" effect
+const NUM_REELS = 40; 
+// Adjusted radius to border the 350px max-width form + its padding
+const RADIUS = 230; // Roughly half of the form's width + its padding + some offset
 
 // Function to calculate position on a circle
 const getReelStyle = (index) => {
@@ -19,7 +21,7 @@ const getReelStyle = (index) => {
     left: `calc(50% + ${x}px)`,
     // Center the reel icon perfectly
     transform: 'translate(-50%, -50%)', 
-    fontSize: '32px', // Increased size for visibility
+    fontSize: '24px', // Slightly smaller for a denser chain
     color: '#9370DB', // Medium Purple color
     zIndex: 1, // Keep reels behind the form
   };
@@ -80,7 +82,7 @@ function SignUp({ setUser }) {
 
   return (
     // 1. Full-page container for centering. 
-    // Uses position: fixed now to ensure it covers the viewport without increasing page scroll.
+    // Uses position: fixed to ensure it covers the viewport without increasing page scroll.
     <div
       style={{
         display: "flex",
@@ -88,10 +90,9 @@ function SignUp({ setUser }) {
         alignItems: "center",
         minHeight: "100vh", 
         width: "100%",
-        position: "fixed", // FIX: Sets the container to fill the screen
+        position: "fixed", 
         top: 0,
         left: 0,
-        // Removed padding here
       }}
     >
       
