@@ -102,7 +102,7 @@ function WelcomeMarquee({ children }) {
             <p>
               If you are a returning customer, please log in.
             </p>
-         git  </div>
+         </div>
           
           {/* Form Content is passed as children */}
           {children}
