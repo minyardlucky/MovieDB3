@@ -3,10 +3,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Constants for the circle effect
-// Increased number of reels for a "chain" effect
 const NUM_REELS = 40; 
-// Adjusted radius to border the 350px max-width form + its padding
-const RADIUS = 230; // Roughly half of the form's width + its padding + some offset
+const RADIUS = 250; // Radius for the movie reel chain
 
 // Function to calculate position on a circle
 const getReelStyle = (index) => {
@@ -16,14 +14,12 @@ const getReelStyle = (index) => {
   
   return {
     position: 'absolute',
-    // Position relative to the center of the viewport
     top: `calc(50% + ${y}px)`,
     left: `calc(50% + ${x}px)`,
-    // Center the reel icon perfectly
     transform: 'translate(-50%, -50%)', 
-    fontSize: '24px', // Slightly smaller for a denser chain
+    fontSize: '28px',
     color: '#9370DB', // Medium Purple color
-    zIndex: 1, // Keep reels behind the form
+    zIndex: 1, 
   };
 };
 
@@ -81,8 +77,7 @@ function SignUp({ setUser }) {
   };
 
   return (
-    // 1. Full-page container for centering. 
-    // Uses position: fixed to ensure it covers the viewport without increasing page scroll.
+    // 1. Full-page container for centering. Position: fixed prevents scrolling.
     <div
       style={{
         display: "flex",
@@ -96,20 +91,28 @@ function SignUp({ setUser }) {
       }}
     >
       
-      {/* 2. Form Container */}
+      {/* 2. Form Container - Now circular */}
       <div
         style={{
           backgroundColor: 'white', 
           padding: '30px',
-          borderRadius: '12px',
+          // KEY CHANGE: Makes the container a circle/oval
+          borderRadius: '50%', 
+          width: '500px', 
+          height: '500px', 
+          // Centers content inside the circular container
+          display: 'flex', 
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
           boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
-          maxWidth: '350px',
-          width: '100%',
-          zIndex: 2, // Keep the form in front of the reels
+          zIndex: 2, 
+          textAlign: 'center', 
         }}
       >
         <h2>Sign Up</h2>
-        <form onSubmit={handleSignUp}>
+        {/* Form content width limited so it fits inside the circle */}
+        <form onSubmit={handleSignUp} style={{ width: '80%', maxWidth: '300px' }}> 
           <div style={{ marginBottom: "15px" }}>
             <label style={{ display: "block", marginBottom: "5px" }}>First Name</label>
             <input
@@ -190,7 +193,7 @@ function SignUp({ setUser }) {
         {error && <p style={{ color: "red", marginTop: "15px" }}>{error}</p>}
       </div>
       
-      {/* 3. Movie Reel Icons (🎞️) - These are absolutely positioned relative to the fixed parent */}
+      {/* 3. Movie Reel Icons (🎞️) - Form the continuous circle border */}
       {[...Array(NUM_REELS)].map((_, index) => (
         <div key={index} style={getReelStyle(index)}>
           🎞️
