@@ -1,6 +1,14 @@
 import React, { useState } from "react";
-// Removed useNavigate to prevent the immediate crash error in the preview environment
-// import { useNavigate } from "react-router-dom"; 
+import { useNavigate as useActualNavigate } from "react-router-dom"; 
+
+// --- Router Safety Check ---
+// The component crashes when previewed outside a Router context.
+// We use a mock here to allow previewing, but your main app will use useActualNavigate.
+const useNavigate = typeof window !== 'undefined' ? useActualActualNavigate : () => {
+    // Return a function that logs navigation attempts instead of crashing
+    return (path) => console.warn(`Navigation attempted to: ${path}. Hook is mocked for isolated view.`);
+};
+
 
 // --- 1. MARQUEE STYLES (Inline CSS) ---
 const MarqueeStyles = `
@@ -101,16 +109,13 @@ function Login({ setUser }) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLogin, setIsLogin] = useState(true); 
-  // const navigate = useNavigate(); // REMOVED to prevent crash in preview
+  const navigate = useNavigate(); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("Login successful, but navigation is disabled in this view."); // Placeholder success
-    
-    // The rest of the login logic (API call, setUser, localStorage) is commented out 
-    // because the surrounding environment prevents accurate execution/redirection.
-    /*
-    if (!username || !password) {
+    setError("");
+
+    if (!username || !password) {
       setError("Please enter both username and password.");
       return;
     }
@@ -135,7 +140,7 @@ function Login({ setUser }) {
 
         setUser(userData);
         localStorage.setItem("user", JSON.stringify(userData)); 
-        // navigate("/"); 
+        navigate("/"); // redirect to home
       } else {
         setError(data.message || "Login failed. Try again.");
       }
@@ -143,7 +148,6 @@ function Login({ setUser }) {
       console.error("Login error:", err);
       setError("Something went wrong. Please try again later.");
     }
-    */
   };
 
   // Placeholder for Signup function (will only display an error until implemented)
@@ -160,7 +164,8 @@ function Login({ setUser }) {
             <form onSubmit={handleLogin} className="space-y-4 w-full"> 
                 {/* Username Input */}
                 <div>
-                    <label className="block text-left text-gray-300 mb-1 font-bold">Username</label>
+                    {/* *** FIXED: Explicit yellow text for high contrast *** */}
+                    <label className="block text-left text-yellow-400 mb-1 font-bold">Username</label> 
                     <input
                         type="text"
                         value={username}
@@ -172,7 +177,8 @@ function Login({ setUser }) {
                 
                 {/* Password Input */}
                 <div>
-                    <label className="block text-left text-gray-300 mb-1 font-bold">Password</label>
+                    {/* *** FIXED: Explicit yellow text for high contrast *** */}
+                    <label className="block text-left text-yellow-400 mb-1 font-bold">Password</label> 
                     <div className="flex w-full"> 
                         <input
                             type={showPassword ? "text" : "password"}
@@ -184,7 +190,7 @@ function Login({ setUser }) {
                         <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="p-3 bg-gray-600 text-gray-300 rounded-r hover:bg-gray-500 transition duration-150"
+                            className="p-3 bg-gray-600 text-yellow-400 rounded-r hover:bg-gray-500 transition duration-150"
                         >
                             {showPassword ? "Hide" : "Show"}
                         </button>
@@ -242,8 +248,9 @@ function Login({ setUser }) {
   return (
     <WelcomeMarquee>
         {/* Enforce a maximum width for the form container and center it */}
-        <div className="p-6 bg-gray-800 rounded-lg shadow-xl border border-yellow-500/50 w-full max-w-sm text-white"> 
-            <h3 className="text-white text-3xl mb-6 font-bold text-center">
+        <div className="p-6 bg-gray-800 rounded-lg shadow-xl border border-yellow-500/50 w-full max-w-md text-white"> 
+            {/* *** FIXED: Explicit yellow text for high contrast *** */}
+            <h3 className="text-yellow-400 text-3xl mb-6 font-bold text-center">
                 {isLogin ? "Customer Login" : "New Account Sign Up"}
             </h3>
             
