@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+// import { useNavigate } from "react-router-dom"; // TEMPORARILY REMOVED TO PREVENT CRASHING IN ISOLATION
 
 // --- 1. MARQUEE STYLES (Inline CSS) ---
 const MarqueeStyles = `
@@ -60,6 +60,21 @@ const MarqueeStyles = `
       0 0 25px #ffaa00,
       0 0 30px #ffaa00;
   }
+
+  /* Specific Form Element Fixes */
+  .login-form-container {
+    width: 350px; /* Explicit width to prevent shrinking */
+    max-width: 100%;
+    margin: 0 auto; /* Center the container */
+  }
+  
+  .login-input {
+    width: 100%; /* Ensure inputs take full width of container */
+  }
+
+  .login-label {
+    display: block; /* Ensure labels stack vertically */
+  }
 `;
 
 /**
@@ -107,7 +122,7 @@ export default function Login({ setUser }) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLogin, setIsLogin] = useState(true); 
-  const navigate = useNavigate(); // This assumes your parent component provides the Router context.
+  // const navigate = useNavigate(); // REMOVED TO PREVENT CRASH
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -138,7 +153,7 @@ export default function Login({ setUser }) {
 
         setUser(userData);
         localStorage.setItem("user", JSON.stringify(userData)); 
-        navigate("/"); // redirect to home
+        // navigate("/"); // REDIRECT IS NOW DISABLED
       } else {
         setError(data.message || "Login failed. Try again.");
       }
@@ -162,25 +177,25 @@ export default function Login({ setUser }) {
             <form onSubmit={handleLogin} className="space-y-4 w-full"> 
                 {/* Username Input */}
                 <div>
-                    <label className="block text-left text-yellow-400 mb-1 font-bold">Username</label> 
+                    <label className="login-label text-left text-yellow-400 mb-1 font-bold">Username</label> 
                     <input
                         type="text"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        className="w-full p-3 rounded bg-gray-700 text-white placeholder-gray-400 focus:ring-yellow-500 focus:border-yellow-500 transition duration-150"
+                        className="login-input p-3 rounded bg-gray-700 text-white placeholder-gray-400 focus:ring-yellow-500 focus:border-yellow-500 transition duration-150"
                         required
                     />
                 </div>
                 
                 {/* Password Input */}
                 <div>
-                    <label className="block text-left text-yellow-400 mb-1 font-bold">Password</label> 
+                    <label className="login-label text-left text-yellow-400 mb-1 font-bold">Password</label> 
                     <div className="flex w-full"> 
                         <input
                             type={showPassword ? "text" : "password"}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="flex-1 p-3 rounded-l bg-gray-700 text-white placeholder-gray-400 focus:ring-yellow-500 focus:border-yellow-500 transition duration-150"
+                            className="login-input flex-1 p-3 rounded-l bg-gray-700 text-white placeholder-gray-400 focus:ring-yellow-500 focus:border-yellow-500 transition duration-150"
                             required
                         />
                         <button
@@ -212,19 +227,19 @@ export default function Login({ setUser }) {
                 
                 {/* Placeholder input fields */}
                 <input 
-                    className="w-full p-3 mb-3 rounded bg-gray-700 text-white placeholder-gray-400" 
+                    className="login-input p-3 mb-3 rounded bg-gray-700 text-white placeholder-gray-400" 
                     type="text" 
                     placeholder="First Name" 
                     required
                 />
                 <input 
-                    className="w-full p-3 mb-3 rounded bg-gray-700 text-white placeholder-gray-400" 
+                    className="login-input p-3 mb-3 rounded bg-gray-700 text-white placeholder-gray-400" 
                     type="text" 
                     placeholder="Username" 
                     required
                 />
                 <input 
-                    className="w-full p-3 mb-4 rounded bg-gray-700 text-white placeholder-gray-400" 
+                    className="login-input p-3 mb-4 rounded bg-gray-700 text-white placeholder-gray-400" 
                     type="password" 
                     placeholder="Password" 
                     required
@@ -244,7 +259,7 @@ export default function Login({ setUser }) {
   return (
     <WelcomeMarquee>
         {/* Outer container ensures the form block itself is centered and sized correctly */}
-        <div className="p-6 bg-gray-800 rounded-lg shadow-xl border border-yellow-500/50 w-full max-w-sm mx-auto text-white"> 
+        <div className="p-6 bg-gray-800 rounded-lg shadow-xl border border-yellow-500/50 text-white login-form-container"> 
             <h3 className="text-yellow-400 text-3xl mb-6 font-bold text-center">
                 {isLogin ? "Customer Login" : "New Account Sign Up"}
             </h3>
