@@ -82,7 +82,6 @@ const MarqueeStyles = `
 
 /**
  * A styled component rendering a classic theater marquee welcome message.
- * The content related to 'Sign up' has been removed from the welcome text.
  */
 function WelcomeMarquee({ children }) {
   return (
@@ -90,6 +89,7 @@ function WelcomeMarquee({ children }) {
     <>
       <style>{MarqueeStyles}</style>
       
+      {/* This outer wrapper centers the entire marquee and form on the screen */}
       <div className="flex justify-center items-center center-screen bg-gray-200">
         <div className="marquee max-w-lg md:max-w-xl text-center">
           
@@ -116,11 +116,11 @@ function WelcomeMarquee({ children }) {
 
 
 function Login({ setUser }) {
-  // --- Login State (Simplified) ---
+  // --- Login State ---
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  // --- UI State (Simplified) ---
+  // --- UI State ---
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
