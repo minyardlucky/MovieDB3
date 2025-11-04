@@ -18,8 +18,8 @@ const getReelStyle = (index) => {
     left: `calc(50% + ${x}px)`,
     transform: 'translate(-50%, -50%)', 
     fontSize: '28px',
-    color: '#9370DB', // Medium Purple color
-    zIndex: 1, 
+    color: '#FFD700', // Changed color to Gold for contrast!
+    zIndex: 3, // Increased zIndex to ensure visibility
   };
 };
 
@@ -91,22 +91,20 @@ function SignUp({ setUser }) {
       }}
     >
       
-      {/* 2. Form Container - Now circular */}
+      {/* 2. Form Container - Circular */}
       <div
         style={{
           backgroundColor: 'white', 
           padding: '30px',
-          // KEY CHANGE: Makes the container a circle/oval
           borderRadius: '50%', 
           width: '500px', 
           height: '500px', 
-          // Centers content inside the circular container
           display: 'flex', 
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
           boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
-          zIndex: 2, 
+          zIndex: 2, // Kept at zIndex 2
           textAlign: 'center', 
         }}
       >
@@ -193,7 +191,7 @@ function SignUp({ setUser }) {
         {error && <p style={{ color: "red", marginTop: "15px" }}>{error}</p>}
       </div>
       
-      {/* 3. Movie Reel Icons (🎞️) - Form the continuous circle border */}
+      {/* 3. Movie Reel Icons (🎞️) - Should now be visible */}
       {[...Array(NUM_REELS)].map((_, index) => (
         <div key={index} style={getReelStyle(index)}>
           🎞️
