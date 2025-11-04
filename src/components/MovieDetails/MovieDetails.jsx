@@ -2,8 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-const APIKey = "c8e7394"; // your OMDb API key
-
 function MovieDetails() {
   const { imdbID } = useParams();
   const [movie, setMovie] = useState(null);
@@ -13,8 +11,13 @@ function MovieDetails() {
     const fetchMovie = async () => {
       try {
         const response = await fetch(
-          `http://www.omdbapi.com/?apikey=${APIKey}&i=${imdbID}&plot=full`
+          `/api/movies/${imdbID}`
         );
+        // Check if the response from your backend was successful
+      if (!response.ok) {
+        throw new Error(`Backend error: ${response.status}`);
+       }
+       
         const data = await response.json();
         if (data) {
           setMovie(data);
