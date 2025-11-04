@@ -10,7 +10,9 @@ function MovieDetails() {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await fetch(`/api/movies/${imdbID}`);
+        const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || ''; // e.g., 'https://mybackend-production.up.railway.app'
+
+        const response = await fetch(`${BACKEND_URL}/api/movies/${imdbID}`);
         // Check if the response from your backend was successful
       if (!response.ok) {
         throw new Error(`Backend error: ${response.status}`);
