@@ -1,91 +1,274 @@
-// src/components/Login/Login.jsx
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, BrowserRouter } from "react-router-dom"; // ADDED BrowserRouter
 
-function Login({ setUser }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError("");
-
-    if (!username || !password) {
-      setError("Please enter both username and password.");
-      return;
+// --- 1. MARQUEE STYLES (Inline CSS) ---
+const MarqueeStyles = `
+  .marquee {
+    position: relative;
+    padding: 3rem 1.5rem;
+    border: 12px solid #ffaa00; /* Gold frame border */
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 170, 0, 0.7), 0 0 30px rgba(255, 170, 0, 0.4);
+    background: #000000;
+    font-family: 'Georgia', serif; 
+    animation: flicker 1s infinite alternate;
+  }
+  
+  .marquee::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 8px dashed #ffdd55; /* Inner dashed light effect */
+    border-radius: 8px;
+    pointer-events: none;
+    animation: glow-flicker 2s infinite alternate;
+  }
+  
+  /* Keyframes for a subtle flickering light effect */
+  @keyframes flicker {
+    0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+      box-shadow: 0 0 15px rgba(255, 170, 0, 0.7), 0 0 30px rgba(255, 170, 0, 0.4);
     }
+    20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+      box-shadow: 0 0 5px rgba(255, 170, 0, 0.3), 0 0 10px rgba(255, 170, 0, 0.2);
+    }
+  }
 
-    try {
-      console.log("BASE URL:", import.meta.env.VITE_API_BASE_URL);
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userName: username, passWord: password }),
-      });
+  @keyframes glow-flicker {
+    0% { opacity: 0.95; }
+    100% { opacity: 1; }
+  }
 
-      const data = await response.json();
+  /* Text Shadow for 'Neon' Effect */
+  .neon-text {
+    text-shadow: 
+      0 0 5px #fff,
+      0 0 10px #fff,
+      0 0 15px #ffaa00,
+      0 0 20px #ffaa00,
+      0 0 25px #ffaa00,
+      0 0 30px #ffaa00;
+  }
+`;
 
-      if (response.ok) {
-        const userData = {
-          firstName: data.user.firstName,
-          lastName: data.user.lastName,
-          userName: data.user.userName,
-          email: data.user.email,
-        };
+/**
+ * A styled component rendering the marquee welcome message.
+ */
+function WelcomeMarquee({ children }) {
+  return (
+    <>
+      <style>{MarqueeStyles}</style>
+      
+      <div className="flex justify-center items-center p-8 min-h-screen bg-gray-900">
+        <div className="marquee w-full max-w-lg md:max-w-xl text-center">
+          
+          <h1 className="neon-text text-4xl sm:text-5xl font-bold text-yellow-300 tracking-wider mb-6 leading-tight">
+            WELCOME TO 
+            <br />
+            LUCKY'S MOVIE CENTER
+          </h1>
 
-        setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData));
-        navigate("/"); // redirect to home
-      } else {
-        setError(data.message || "Login failed. Try again.");
-      }
-    } catch (err) {
-      console.error("Login error:", err);
-      setError("Something went wrong. Please try again later.");
+          <div className="text-white text-xl sm:text-2xl neon-text font-normal space-y-4 mb-8">
+            <p>
+              If you are a returning customer, please log in.
+            </p>
+            <p className="text-yellow-400 font-semibold">
+              New to the show? Sign up!
+            </p>
+          </div>
+          
+          <div className="mt-8">
+            {children}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+// --- 2. MAIN LOGIN COMPONENT LOGIC (Renamed) ---
+function LoginContent({ setUser }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [isLogin, setIsLogin] = useState(true); // Added state to handle Login/Signup toggle
+  const navigate = useNavigate(); // Requires Router context
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!username || !password) {
+      setError("Please enter both username and password.");
+      return;
+    }
+
+    try {
+      console.log("BASE URL:", import.meta.env.VITE_API_BASE_URL);
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userName: username, passWord: password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        const userData = {
+          firstName: data.user.firstName,
+          lastName: data.user.lastName,
+          userName: data.user.userName,
+          email: data.user.email,
+        };
+
+        setUser(userData);
+        // NOTE: Consider moving to Firestore/cookies for security/scalability
+        localStorage.setItem("user", JSON.stringify(userData)); 
+        navigate("/"); // redirect to home
+      } else {
+        setError(data.message || "Login failed. Try again.");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Something went wrong. Please try again later.");
+    }
+  };
+
+  // Placeholder for Signup function (will only display an error until implemented)
+  const handleSignupPlaceholder = (e) => {
+    e.preventDefault();
+    setError("Please implement your full signup logic before proceeding.");
+  };
+
+  // Helper function to render either Login or Signup form
+  const renderForm = () => {
+    // Current Form is Login
+    if (isLogin) {
+        return (
+            <form onSubmit={handleLogin} className="space-y-4">
+                {/* Username Input */}
+                <div>
+                    <label className="block text-left text-gray-300 mb-1">Username</label>
+                    <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        className="w-full p-3 rounded bg-gray-700 text-white placeholder-gray-400 focus:ring-yellow-500 focus:border-yellow-500 transition duration-150"
+                        required
+                    />
+                </div>
+                
+                {/* Password Input */}
+                <div>
+                    <label className="block text-left text-gray-300 mb-1">Password</label>
+                    <div className="flex">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="flex-1 p-3 rounded-l bg-gray-700 text-white placeholder-gray-400 focus:ring-yellow-500 focus:border-yellow-500 transition duration-150"
+                            required
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="p-3 bg-gray-600 text-gray-300 rounded-r hover:bg-gray-500 transition duration-150"
+                        >
+                            {showPassword ? "Hide" : "Show"}
+                        </button>
+                    </div>
+                </div>
+
+                <button 
+                    type="submit" 
+                    className="w-full p-3 bg-yellow-500 text-gray-900 font-bold rounded-lg hover:bg-yellow-600 transition duration-150 shadow-md"
+                >
+                    LOG IN
+                </button>
+            </form>
+        );
+    } 
+    // Current Form is Signup (Placeholder)
+    else {
+        return (
+            <form onSubmit={handleSignupPlaceholder} className="space-y-4">
+                <p className="text-gray-400">
+                    Your full signup form would go here. For now, click Signup below.
+                </p>
+                
+                {/* Placeholder input fields */}
+                <input 
+                    className="w-full p-3 mb-3 rounded bg-gray-700 text-white placeholder-gray-400" 
+                    type="text" 
+                    placeholder="First Name" 
+                    required
+                />
+                <input 
+                    className="w-full p-3 mb-3 rounded bg-gray-700 text-white placeholder-gray-400" 
+                    type="text" 
+                    placeholder="Username" 
+                    required
+                />
+                <input 
+                    className="w-full p-3 mb-4 rounded bg-gray-700 text-white placeholder-gray-400" 
+                    type="password" 
+                    placeholder="Password" 
+                    required
+                />
+                
+                <button 
+                    type="submit" 
+                    className="w-full p-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition duration-150 shadow-md"
+                >
+                    SIGN UP
+                </button>
+            </form>
+        );
     }
   };
 
-  return (
-    <div style={{ padding: "20px" }}>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin} style={{ maxWidth: "300px" }}>
-        <div style={{ marginBottom: "10px" }}>
-          <label>Username</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </div>
-        <div style={{ marginBottom: "10px" }}>
-          <label>Password</label>
-          <div style={{ display: "flex" }}>
-            <input
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{ flex: 1, padding: "8px" }}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              style={{ marginLeft: "5px", padding: "8px", cursor: "pointer" }}
+  return (
+    <WelcomeMarquee>
+        <div className="p-6 bg-gray-800 rounded-lg shadow-xl border border-yellow-500/50 w-full">
+            <h3 className="text-white text-3xl mb-6 font-bold text-center">
+                {isLogin ? "Customer Login" : "New Account Sign Up"}
+            </h3>
+            
+            {renderForm()}
+            
+            {error && <p className="text-red-500 text-center mt-4 font-semibold">{error}</p>}
+            
+            <button 
+                onClick={() => {
+                    setIsLogin(!isLogin);
+                    setError(''); // Clear error on toggle
+                    setUsername(''); // Clear fields on toggle
+                    setPassword('');
+                }}
+                className="w-full mt-6 text-sm text-yellow-400 hover:text-yellow-300 transition duration-150"
             >
-              {showPassword ? "Hide" : "Show"}
+                {isLogin ? "Need an account? Sign Up!" : "Already have an account? Log In!"}
             </button>
-          </div>
         </div>
-        <button type="submit" style={{ padding: "8px 15px" }}>
-          Login
-        </button>
-      </form>
-      {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
-    </div>
-  );
+    </WelcomeMarquee>
+  );
+}
+
+// --- 3. EXPORTED COMPONENT (The new default export) ---
+// This wrapper provides the BrowserRouter context needed for `useNavigate` in LoginContent
+function Login(props) {
+    // Provide a dummy setUser function if none is passed (for isolated preview)
+    const setUser = props.setUser || (() => {}); 
+
+    return (
+        <BrowserRouter>
+            <LoginContent setUser={setUser} />
+        </BrowserRouter>
+    );
 }
 
 export default Login;
