@@ -4,7 +4,8 @@ import { useNavigate as useActualNavigate } from "react-router-dom";
 // --- Router Safety Check ---
 // The component crashes when previewed outside a Router context.
 // We use a mock here to allow previewing, but your main app will use useActualNavigate.
-const useNavigate = typeof window !== 'undefined' ? useActualActualNavigate : () => {
+// FIXED: Typo corrected from useActualActualNavigate to useActualNavigate
+const useNavigate = typeof window !== 'undefined' ? useActualNavigate : () => { 
     // Return a function that logs navigation attempts instead of crashing
     return (path) => console.warn(`Navigation attempted to: ${path}. Hook is mocked for isolated view.`);
 };
