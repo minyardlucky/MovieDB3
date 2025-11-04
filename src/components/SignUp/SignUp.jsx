@@ -2,6 +2,27 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// Constants for the circle effect
+const NUM_REELS = 8; // Number of movie reels
+const RADIUS = 200; // Radius of the circle (in pixels)
+
+// Function to calculate position on a circle
+const getReelStyle = (index) => {
+  const angle = (index / NUM_REELS) * 2 * Math.PI; // Angle for the current reel
+  const x = RADIUS * Math.cos(angle);
+  const y = RADIUS * Math.sin(angle);
+  
+  return {
+    position: 'absolute',
+    top: `calc(50% + ${y}px)`,
+    left: `calc(50% + ${x}px)`,
+    transform: 'translate(-50%, -50%)', // Center the reel icon
+    fontSize: '24px', // Size of the reel icon
+    color: '#FFD700', // Gold color for movie reel
+    zIndex: 1, // Keep reels behind the form for a nice effect
+  };
+};
+
 function SignUp({ setUser }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -56,68 +77,100 @@ function SignUp({ setUser }) {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSignUp} style={{ maxWidth: "300px" }}>
-        <div style={{ marginBottom: "10px" }}>
-          <label>First Name</label>
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </div>
-        <div style={{ marginBottom: "10px" }}>
-          <label>Last Name</label>
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </div>
-        <div style={{ marginBottom: "10px" }}>
-          <label>Username</label>
-          <input
-            type="text"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </div>
-        <div style={{ marginBottom: "10px" }}>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </div>
-        <div style={{ marginBottom: "10px" }}>
-          <label>Password</label>
-          <div style={{ display: "flex" }}>
+    // 1. Full-page container for centering and relative positioning
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh", // Ensures it takes up full viewport height
+        padding: "20px",
+        position: "relative", // Crucial for positioning the reels absolutely
+      }}
+    >
+      
+      {/* 2. Container for the form to apply a style */}
+      <div
+        style={{
+          backgroundColor: '#f9f9f9',
+          padding: '20px',
+          borderRadius: '10px',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          maxWidth: '350px',
+          width: '100%',
+          zIndex: 2, // Keep the form in front of the reels
+        }}
+      >
+        <h2>Sign Up</h2>
+        <form onSubmit={handleSignUp} style={{}}>
+          <div style={{ marginBottom: "10px" }}>
+            <label>First Name</label>
             <input
-              type={showPassword ? "text" : "password"}
-              value={passWord}
-              onChange={(e) => setPassWord(e.target.value)}
-              style={{ flex: 1, padding: "8px" }}
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              style={{ width: "100%", padding: "8px" }}
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              style={{ marginLeft: "5px", padding: "8px", cursor: "pointer" }}
-            >
-              {showPassword ? "Hide" : "Show"}
-            </button>
           </div>
+          <div style={{ marginBottom: "10px" }}>
+            <label>Last Name</label>
+            <input
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              style={{ width: "100%", padding: "8px" }}
+            />
+          </div>
+          <div style={{ marginBottom: "10px" }}>
+            <label>Username</label>
+            <input
+              type="text"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              style={{ width: "100%", padding: "8px" }}
+            />
+          </div>
+          <div style={{ marginBottom: "10px" }}>
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{ width: "100%", padding: "8px" }}
+            />
+          </div>
+          <div style={{ marginBottom: "10px" }}>
+            <label>Password</label>
+            <div style={{ display: "flex" }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                value={passWord}
+                onChange={(e) => setPassWord(e.target.value)}
+                style={{ flex: 1, padding: "8px" }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{ marginLeft: "5px", padding: "8px", cursor: "pointer" }}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+          </div>
+          <button type="submit" style={{ padding: "8px 15px", width: "100%" }}>
+            Sign Up
+          </button>
+        </form>
+        {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+      </div>
+      
+      {/* 3. Movie Reel Icons (using 🎬 emoji) */}
+      {[...Array(NUM_REELS)].map((_, index) => (
+        <div key={index} style={getReelStyle(index)}>
+          🎬
         </div>
-        <button type="submit" style={{ padding: "8px 15px" }}>
-          Sign Up
-        </button>
-      </form>
-      {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+      ))}
+      
     </div>
   );
 }
