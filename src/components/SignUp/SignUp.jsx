@@ -14,7 +14,7 @@ const getReelStyle = (index) => {
   
   return {
     position: 'absolute',
-    // Position relative to the center of the main container
+    // Position relative to the center of the viewport
     top: `calc(50% + ${y}px)`,
     left: `calc(50% + ${x}px)`,
     // Center the reel icon perfectly
@@ -79,24 +79,26 @@ function SignUp({ setUser }) {
   };
 
   return (
-    // 1. Full-page container for centering, relative positioning, and circle spacing
+    // 1. Full-page container for centering. 
+    // Uses position: fixed now to ensure it covers the viewport without increasing page scroll.
     <div
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh", 
-        // IMPORTANT FIX: Added large padding to prevent the absolutely positioned reels
-        // from being cut off by the container's edges.
-        padding: "300px", 
-        position: "relative",
+        width: "100%",
+        position: "fixed", // FIX: Sets the container to fill the screen
+        top: 0,
+        left: 0,
+        // Removed padding here
       }}
     >
       
       {/* 2. Form Container */}
       <div
         style={{
-          backgroundColor: 'white', // Changed to white for better contrast
+          backgroundColor: 'white', 
           padding: '30px',
           borderRadius: '12px',
           boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
@@ -159,7 +161,7 @@ function SignUp({ setUser }) {
                   marginLeft: "0px", 
                   padding: "10px 15px", 
                   cursor: "pointer", 
-                  backgroundColor: '#4CAF50', // Green button
+                  backgroundColor: '#4CAF50', 
                   color: 'white',
                   border: 'none',
                   borderRadius: "0 5px 5px 0"
@@ -174,7 +176,7 @@ function SignUp({ setUser }) {
             style={{ 
               padding: "12px 15px", 
               width: "100%", 
-              backgroundColor: '#007BFF', // Blue submit button
+              backgroundColor: '#007BFF', 
               color: 'white',
               border: 'none',
               borderRadius: '5px',
@@ -187,7 +189,7 @@ function SignUp({ setUser }) {
         {error && <p style={{ color: "red", marginTop: "15px" }}>{error}</p>}
       </div>
       
-      {/* 3. Movie Reel Icons (🎞️) */}
+      {/* 3. Movie Reel Icons (🎞️) - These are absolutely positioned relative to the fixed parent */}
       {[...Array(NUM_REELS)].map((_, index) => (
         <div key={index} style={getReelStyle(index)}>
           🎞️
