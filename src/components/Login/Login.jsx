@@ -16,7 +16,7 @@ const MarqueeStyles = `
     border: 12px solid #ffaa00; /* Gold frame border */
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(255, 170, 0, 0.7), 0 0 30px rgba(255, 170, 0, 0.4);
-    background: #000000;
+    background: #333333; /* MEDIUM GRAY MARQUEE BACKGROUND */
     font-family: 'Georgia', serif; 
     animation: flicker 1s infinite alternate;
   }
@@ -85,8 +85,8 @@ function WelcomeMarquee({ children }) {
     <>
       <style>{MarqueeStyles}</style>
       
-      {/* Ensures the marquee is centered vertically and horizontally */}
-      <div className="flex justify-center items-center p-8 min-h-screen bg-gray-900">
+      {/* Changed background from bg-gray-900 to bg-gray-200 */}
+      <div className="flex justify-center items-center p-8 min-h-screen bg-gray-200"> 
         {/* Increased max-w for better spacing */}
         <div className="marquee w-full max-w-2xl md:max-w-3xl text-center"> 
           
@@ -259,7 +259,8 @@ export default function Login({ setUser }) {
   return (
     <WelcomeMarquee>
         {/* Outer container ensures the form block itself is centered and sized correctly */}
-        <div className="p-6 bg-gray-800 rounded-lg shadow-xl border border-yellow-500/50 text-white login-form-container"> 
+        {/* Changed form background to black to contrast with the medium gray marquee background */}
+        <div className="p-6 bg-black rounded-lg shadow-xl border border-yellow-500/50 text-white login-form-container"> 
             <h3 className="text-yellow-400 text-3xl mb-6 font-bold text-center">
                 {isLogin ? "Customer Login" : "New Account Sign Up"}
             </h3>
