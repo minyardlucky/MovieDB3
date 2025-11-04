@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, BrowserRouter } from "react-router-dom"; // ADDED BrowserRouter
+import { useNavigate } from "react-router-dom"; 
 
 // --- 1. MARQUEE STYLES (Inline CSS) ---
 const MarqueeStyles = `
@@ -89,63 +89,64 @@ function WelcomeMarquee({ children }) {
   );
 }
 
-// --- 2. MAIN LOGIN COMPONENT LOGIC (Renamed) ---
-function LoginContent({ setUser }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [isLogin, setIsLogin] = useState(true); // Added state to handle Login/Signup toggle
-  const navigate = useNavigate(); // Requires Router context
+// --- 2. MAIN LOGIN COMPONENT LOGIC (Restored to original export name) ---
+function Login({ setUser }) { // Using Login name directly now
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [isLogin, setIsLogin] = useState(true); // Added state to handle Login/Signup toggle
+  const navigate = useNavigate(); // Now works because a parent component provides the Router context
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError("");
-
-    if (!username || !password) {
-      setError("Please enter both username and password.");
-      return;
-    }
-
-    try {
-      console.log("BASE URL:", import.meta.env.VITE_API_BASE_URL);
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userName: username, passWord: password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        const userData = {
-          firstName: data.user.firstName,
-          lastName: data.user.lastName,
-          userName: data.user.userName,
-          email: data.user.email,
-        };
-
-        setUser(userData);
-        // NOTE: Consider moving to Firestore/cookies for security/scalability
-        localStorage.setItem("user", JSON.stringify(userData)); 
-        navigate("/"); // redirect to home
-      } else {
-        setError(data.message || "Login failed. Try again.");
-      }
-    } catch (err) {
-      console.error("Login error:", err);
-      setError("Something went wrong. Please try again later.");
-    }
-  };
-
-  // Placeholder for Signup function (will only display an error until implemented)
-  const handleSignupPlaceholder = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
+
+    if (!username || !password) {
+      setError("Please enter both username and password.");
+      return;
+    }
+
+    try {
+     console.log("BASE URL:", import.meta.env.VITE_API_BASE_URL);
+     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/login`, {
+       method: "POST",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({ userName: username, passWord: password }),
+      });
+
+     const data = await response.json();
+
+     if (response.ok) {
+      const userData = {
+       firstName: data.user.firstName,
+       lastName: data.user.lastName,
+        userName: data.user.userName,
+        email: data.user.email,
+       };
+
+       setUser(userData);
+        // NOTE: Consider moving to Firestore/cookies for security/scalability
+        localStorage.setItem("user", JSON.stringify(userData)); 
+        navigate("/"); // redirect to home
+       } else {
+        setError(data.message || "Login failed. Try again.");
+       }
+    } catch (err) {
+     console.error("Login error:", err);
+      setError("Something went wrong. Please try again later.");
+   }
+  };
+
+  // Placeholder for Signup function (will only display an error until implemented)
+  const handleSignupPlaceholder = (e) => {
+    e.preventDefault();
+    // This action prevents the form submission and gives a friendly error
     setError("Please implement your full signup logic before proceeding.");
   };
 
-  // Helper function to render either Login or Signup form
-  const renderForm = () => {
+  // Helper function to render either Login or Signup form
+  const renderForm = () => {
     // Current Form is Login
     if (isLogin) {
         return (
@@ -255,21 +256,10 @@ function LoginContent({ setUser }) {
             </button>
         </div>
     </WelcomeMarquee>
-  );
+  );
 }
 
-// --- 3. EXPORTED COMPONENT (The new default export) ---
-// This wrapper provides the BrowserRouter context needed for `useNavigate` in LoginContent
-function Login(props) {
-    // Provide a dummy setUser function if none is passed (for isolated preview)
-    const setUser = props.setUser || (() => {}); 
-
-    return (
-        <BrowserRouter>
-            <LoginContent setUser={setUser} />
-        </BrowserRouter>
-    );
-}
-
+// --- 3. EXPORTED COMPONENT ---
+// Export the component directly, assuming your App.jsx provides the <Router> context
 export default Login;
 
