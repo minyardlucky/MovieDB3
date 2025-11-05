@@ -1,4 +1,3 @@
-// src/components/Nav.jsx
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -8,6 +7,7 @@ function Nav({ user, setUser }) {
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem("token"); // clear JWT
+    localStorage.removeItem("user"); // IMPORTANT: Clear the user object from local storage
     navigate("/login"); // redirect to login page
   };
 
@@ -68,9 +68,21 @@ function Nav({ user, setUser }) {
             >
               Sign Up
             </Link>
+            {/* 💡 FIX: The Login Link was invisible because it had the same text decoration as its peers. 
+                 It needs to be clearly styled as a primary button for the logged-out state.
+            */}
             <Link
               to="/login"
-              style={{ marginRight: "15px", color: "white", textDecoration: "none" }}
+              style={{ 
+                background: "#FFD700", // Bright color
+                color: "#333",          // Dark text
+                border: "none",
+                padding: "6px 12px",
+                cursor: "pointer",
+                borderRadius: "4px",
+                textDecoration: "none", // Remove underline
+                fontWeight: "bold"
+              }}
             >
               Login
             </Link>
