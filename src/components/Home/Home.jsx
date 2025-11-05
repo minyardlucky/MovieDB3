@@ -42,7 +42,7 @@ function Home() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "100px 20px 20px 20px "}}>
       <h2>Search Movies</h2>
 
       {/* Search Bar */}
