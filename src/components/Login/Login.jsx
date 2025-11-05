@@ -86,7 +86,7 @@ function Login({ setUser }) {
         scrollamount="5"
       >
         {/* Doubled message content from your request */}
-        🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or SignUp and start reserving your tickets today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or Sign Up and start reserving your tickets today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or Sign Up and start reserving your tickets today! 🎬
+        🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or SignUp and start viewing movie information today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or Sign Up and start viewing movie information today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or Sign Up and start viewing movie information today! 🎬
       </marquee>
 
       {/* 4. Inner div restores the padding for the centered form content */}
