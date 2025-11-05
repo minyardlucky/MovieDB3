@@ -74,7 +74,7 @@ function Login({ setUser }) {
           color: "#FFD700",
           backgroundColor: "#333",
           // Taller height from your request (15px top/bottom padding)
-          padding: "15px 0",
+          padding: "20px 0",
           fontSize: "20px",
           fontWeight: "bold",
           // 3. Applying the flashing border
@@ -86,7 +86,7 @@ function Login({ setUser }) {
         scrollamount="5"
       >
         {/* Doubled message content from your request */}
-        🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information and start reserving your tickets today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information and start reserving your tickets today! 🎬
+        🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information and start reserving your tickets today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information and start reserving your tickets today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information and start reserving your tickets today! 🎬
       </marquee>
 
       {/* 4. Inner div restores the padding for the centered form content */}
