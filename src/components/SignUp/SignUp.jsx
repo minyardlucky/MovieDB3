@@ -1,4 +1,3 @@
-// src/components/SignUp/SignUp.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,13 +12,13 @@ const getReelStyle = (index) => {
   const y = RADIUS * Math.sin(angle);
   
   return {
-    position: 'absolute',
+    position: 'fixed', // Set reels to fixed so they don't scroll with content
     top: `calc(50% + ${y}px)`,
     left: `calc(50% + ${x}px)`,
     transform: 'translate(-50%, -50%)', 
     fontSize: '28px',
-    color: '#FFD700', // Changed color to Gold for contrast!
-    zIndex: 3, // Increased zIndex to ensure visibility
+    color: '#FFD700', 
+    zIndex: 1, // Lower zIndex so they are behind the form but still visible
   };
 };
 
@@ -77,17 +76,17 @@ function SignUp({ setUser }) {
   };
 
   return (
-    // 1. Full-page container for centering. Position: fixed prevents scrolling.
+    // 1. Full-page container FIXED: Removed position: fixed from this element
+    // ADDED: marginTop to push content below the fixed nav bar (~60px)
     <div
       style={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "100vh", 
+        minHeight: "calc(100vh - 60px)", // Adjust min-height for nav bar space
         width: "100%",
-        position: "fixed", 
-        top: 0,
-        left: 0,
+        marginTop: '60px', // Pushes content down below the nav bar
+        paddingBottom: '20px', // Add padding in case content exceeds view height
       }}
     >
       
@@ -191,7 +190,7 @@ function SignUp({ setUser }) {
         {error && <p style={{ color: "red", marginTop: "15px" }}>{error}</p>}
       </div>
       
-      {/* 3. Movie Reel Icons (🎞️) - Should now be visible */}
+      {/* 3. Movie Reel Icons (🎞️) - Position is fixed via getReelStyle now */}
       {[...Array(NUM_REELS)].map((_, index) => (
         <div key={index} style={getReelStyle(index)}>
           🎞️
