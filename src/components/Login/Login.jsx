@@ -123,93 +123,102 @@ function Login({ setUser }) {
         }}
       >
         {/* LOGIN CARD */}
-        <div
+        
+<div
+  style={{
+    backgroundColor: "rgba(0, 0, 0, 0.7)", // semi-transparent dark background
+    padding: "30px",
+    borderRadius: "10px",
+    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.5)",
+    zIndex: 2,
+    color: "white", // text color inside card
+    maxWidth: "350px",
+    width: "100%",
+  }}
+>
+  <h2 style={{ color: "#FFD700", marginBottom: "20px" }}>Customer Login</h2>
+  <form onSubmit={handleLogin}>
+    <div style={{ marginBottom: "15px" }}>
+      <label style={{ display: "block", marginBottom: "5px" }}>Username</label>
+      <input
+        type="text"
+        value={userName}
+        onChange={(e) => setUserName(e.target.value)}
+        style={{
+          width: "100%",
+          padding: "10px",
+          border: "1px solid #FFD700",
+          borderRadius: "4px",
+          backgroundColor: "rgba(255, 255, 255, 0.1)",
+          color: "white", // ✅ text color
+        }}
+      />
+    </div>
+
+    <div style={{ marginBottom: "20px" }}>
+      <label style={{ display: "block", marginBottom: "5px" }}>Password</label>
+      <div style={{ display: "flex" }}>
+        <input
+          type={showPassword ? "text" : "password"}
+          value={passWord}
+          onChange={(e) => setPassWord(e.target.value)}
           style={{
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
-            padding: "30px",
-            borderRadius: "10px",
-            boxShadow: "0 8px 16px rgba(0, 0, 0, 0.5)",
-            zIndex: 2,
-            color: "white",
-            maxWidth: "350px",
-            width: "100%",
+            flex: 1,
+            padding: "10px",
+            border: "1px solid #FFD700",
+            borderRadius: "4px 0 0 4px",
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            color: "white", // ✅ text color
+          }}
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          style={{
+            padding: "10px 15px",
+            cursor: "pointer",
+            backgroundColor: "#FFD700",
+            color: "#333",
+            border: "none",
+            borderRadius: "0 4px 4px 0",
+            fontWeight: "bold",
           }}
         >
-          <h2 style={{ color: "#FFD700", marginBottom: "20px" }}>Customer Login</h2>
-          <form onSubmit={handleLogin}>
-            <div style={{ marginBottom: "15px" }}>
-              <label style={{ display: "block", marginBottom: "5px" }}>Username</label>
-              <input
-                type="text"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  border: "1px solid #FFD700",
-                  borderRadius: "4px",
-                  backgroundColor: "rgba(255, 255, 255, 0.1)",
-                }}
-              />
-            </div>
-            <div style={{ marginBottom: "20px" }}>
-              <label style={{ display: "block", marginBottom: "5px" }}>Password</label>
-              <div style={{ display: "flex" }}>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={passWord}
-                  onChange={(e) => setPassWord(e.target.value)}
-                  style={{
-                    flex: 1,
-                    padding: "10px",
-                    border: "1px solid #FFD700",
-                    borderRadius: "4px 0 0 4px",
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  style={{
-                    padding: "10px 15px",
-                    cursor: "pointer",
-                    backgroundColor: "#FFD700",
-                    color: "#333",
-                    border: "none",
-                    borderRadius: "0 4px 4px 0",
-                  }}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button>
-              </div>
-            </div>
-            <button
-              type="submit"
-              style={{
-                padding: "10px 15px",
-                width: "100%",
-                backgroundColor: "#007BFF",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
-              Log In
-            </button>
-          </form>
-          {error && <p style={{ color: "#FFD700", marginTop: "15px" }}>{error}</p>}
-          <p style={{ marginTop: "15px", textAlign: "center" }}>
-            <a
-              href="#"
-              onClick={() => navigate("/signup")}
-              style={{ color: "#FFD700", textDecoration: "underline" }}
-            >
-              Need an account? Sign Up!
-            </a>
-          </p>
-        </div>
+          {showPassword ? "Hide" : "Show"}
+        </button>
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      style={{
+        padding: "10px 15px",
+        width: "100%",
+        backgroundColor: "#007BFF",
+        color: "white",
+        border: "none",
+        borderRadius: "4px",
+        cursor: "pointer",
+        fontWeight: "bold",
+      }}
+    >
+      Log In
+    </button>
+  </form>
+
+  {error && <p style={{ color: "#FFD700", marginTop: "15px" }}>{error}</p>}
+
+  <p style={{ marginTop: "15px", textAlign: "center" }}>
+    <a
+      href="#"
+      onClick={() => navigate("/signup")}
+      style={{ color: "#FFD700", textDecoration: "underline" }}
+    >
+      Need an account? Sign Up!
+    </a>
+  </p>
+</div>
+
       </div>
     </div>
   );
