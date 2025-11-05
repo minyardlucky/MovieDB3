@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import "./nav.css"; // Make sure to import the CSS
 
 function Nav({ user, setUser }) {
   const navigate = useNavigate();
@@ -10,88 +11,36 @@ function Nav({ user, setUser }) {
     localStorage.removeItem("user");
     navigate("/login"); // redirect to login page
   };
-  
-  // New handler for the unauthenticated Login button
+
   const handleLoginClick = () => {
-      navigate("/login");
+    navigate("/login");
   };
 
-  // New handler for the unauthenticated Sign Up button
   const handleSignUpClick = () => {
-      navigate("/signup");
+    navigate("/signup");
   };
 
   return (
     <nav className="Navbar">
-      
-      {/* Left side: App name */}
-      <Link
-        to="/"
-        style={{
-          color: "white",
-          textDecoration: "none",
-          fontSize: "20px",
-          fontWeight: "bold",
-        }}
-      >
+      <Link to="/" className="logo">
         Movie DataBase/Home
       </Link>
 
-      {/* Right side: Auth buttons */}
-      <div>
+      <div className="auth-buttons">
         {user ? (
           <>
-            <span style={{ marginRight: "15px" }}>{user.username}</span>
-            <Link
-              to="/profile"
-              style={{ marginRight: "15px", color: "white", textDecoration: "none" }}
-            >
-              Profile
-            </Link>
-            <button
-              onClick={handleLogout}
-              style={{
-                background: "red",
-                color: "white",
-                border: "none",
-                padding: "6px 12px",
-                cursor: "pointer",
-                borderRadius: "4px",
-              }}
-            >
+            <span className="username">{user.username}</span>
+            <Link to="/profile" className="profile-link">Profile</Link>
+            <button className="logout-btn" onClick={handleLogout}>
               Logout
             </button>
           </>
         ) : (
           <>
-            {/* Switched Link to Button for Sign Up, using programmatic navigation */}
-            <button
-              onClick={handleSignUpClick}
-              style={{
-                marginRight: "15px", 
-                background: "transparent",
-                color: "white",
-                border: "none",
-                padding: "6px 12px",
-                cursor: "pointer",
-              }}
-            >
+            <button className="signup-btn" onClick={handleSignUpClick}>
               Sign Up
             </button>
-            
-            {/* Switched Link to Button for Login, using programmatic navigation */}
-            <button
-              onClick={handleLoginClick}
-              style={{ 
-                background: "#FFD700",
-                color: "#333",
-                border: "none",
-                padding: "6px 12px",
-                cursor: "pointer",
-                borderRadius: "4px",
-                fontWeight: "bold"
-              }}
-            >
+            <button className="login-btn" onClick={handleLoginClick}>
               Login
             </button>
           </>

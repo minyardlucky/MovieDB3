@@ -1,3 +1,4 @@
+/* Navbar container */
 .Navbar {
   height: 75px;
   background-color: black;
@@ -5,43 +6,94 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;         /* ✅ full width */
+  width: 100%;
   position: fixed;
   top: 0;
   left: 0;
-  padding: 0 20px;     /* spacing inside navbar */
+  padding: 0 20px;
   box-sizing: border-box;
   z-index: 50;
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
-  .h1-logo {
-    padding: 20px;
-  }
-  .h1-logo a {
-    text-decoration: none;
-    color: white;
-  }
-  .h1-logo h1 {
-    font-size: 20px;
-  }
-  div ul {
-    padding: 20px;
-  }
-  div ul li {
-    display: inline-block;
-  }
-  div ul li a {
-    text-decoration: none;
-    color: white;
-  }
-  .selected {
-    border-bottom: 1px solid white;
-  }
+/* Logo / App name */
+.Navbar .logo {
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: bold;
+}
 
-  .active{
-    border-bottom: 1px solid white;
-    
+/* Auth buttons container */
+.Navbar .auth-buttons {
+  display: flex;
+  align-items: center;
+}
+
+/* Individual buttons */
+.Navbar .auth-buttons button {
+  margin-left: 10px;
+  padding: 6px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+/* Login button */
+.Navbar .auth-buttons .login-btn {
+  background: #FFD700;
+  color: #333;
+}
+
+/* Sign up button */
+.Navbar .auth-buttons .signup-btn {
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+}
+
+/* Logout button */
+.Navbar .auth-buttons .logout-btn {
+  background: red;
+  color: white;
+}
+
+/* Profile link */
+.Navbar .auth-buttons .profile-link {
+  margin-left: 10px;
+  color: white;
+  text-decoration: none;
+}
+
+/* Username display */
+.Navbar .auth-buttons .username {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+/* Hover effects */
+.Navbar .auth-buttons button:hover,
+.Navbar .auth-buttons .profile-link:hover {
+  opacity: 0.8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .Navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 10px;
   }
-  .right-side-nav ul li:not(:last-child) {
-    margin-right: 15px;
+  .Navbar .auth-buttons {
+    margin-top: 10px;
+    flex-direction: column;
   }
+  .Navbar .auth-buttons button,
+  .Navbar .auth-buttons .profile-link {
+    margin-left: 0;
+    margin-top: 5px;
+  }
+}
+
