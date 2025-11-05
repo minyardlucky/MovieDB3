@@ -30,6 +30,9 @@ function Nav({ user, setUser }) {
         padding: "10px 20px",
         background: "#333",
         color: "white",
+        position: 'fixed',
+        width: '100%',
+        zIndex: 50,
       }}
     >
       {/* Left side: App name */}
