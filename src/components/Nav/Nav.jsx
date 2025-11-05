@@ -22,19 +22,8 @@ function Nav({ user, setUser }) {
   };
 
   return (
-    <nav
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "10px 20px",
-        background: "#333",
-        color: "white",
-        position: 'fixed',
-        width: '100%',
-        zIndex: 50,
-      }}
-    >
+    <nav className="Navbar">
+      
       {/* Left side: App name */}
       <Link
         to="/"

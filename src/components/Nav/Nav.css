@@ -1,16 +1,19 @@
 .Navbar {
-    height: 75px;
-    background-color: black;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    width: 90vw;
-    left: 0;
-  }
+  height: 75px;
+  background-color: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;         /* ✅ full width */
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 0 20px;     /* spacing inside navbar */
+  box-sizing: border-box;
+  z-index: 50;
+}
+
   .h1-logo {
     padding: 20px;
   }
