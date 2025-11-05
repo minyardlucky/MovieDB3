@@ -86,7 +86,7 @@ function Login({ setUser }) {
             color: "#FFD700",
             backgroundColor: "#333",
             padding: "20px 0",
-            fontSize: "20px",
+            fontSize: "40px",
             fontWeight: "bold",
             border: "6px solid #FFD700",
             animation: "pulseYellowBorder 2s infinite alternate",
