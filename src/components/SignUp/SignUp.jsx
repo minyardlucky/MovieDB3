@@ -89,6 +89,7 @@ function SignUp({ setUser }) {
     top: '60px', // Pushes the container down 60px
     left: 0,
     zIndex: 1, // Ensures the nav bar (zIndex > 1) is clickable
+    backgroundColor: '#001f4d'
   }}
 >
       
