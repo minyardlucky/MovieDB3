@@ -32,7 +32,7 @@ function MovieDetails() {
   if (!movie) return <p>Loading...</p>;
 
   return (
-    <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
+    <div style={{ padding: "100px 20px 20px 20px", maxWidth: "800px", margin: "0 auto" }}>
      <button
       onClick={() => navigate(-1)}
         style={{ marginBottom: "20px", padding: "6px 12px" }}
