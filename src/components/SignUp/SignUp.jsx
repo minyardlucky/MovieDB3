@@ -78,18 +78,19 @@ function SignUp({ setUser }) {
 
   return (
     // 1. Full-page container for centering. Position: fixed prevents scrolling.
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh", 
-        width: "100%",
-        position: "fixed", 
-        top: 0,
-        left: 0,
-      }}
-    >
+ <div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: 'calc(100vh - 60px)', // Shrinks the height to fit below the navbar
+    width: "100%",
+    position: "fixed", 
+    top: '60px', // Pushes the container down 60px
+    left: 0,
+    zIndex: 1, // Ensures the nav bar (zIndex > 1) is clickable
+  }}
+>
       
       {/* 2. Form Container - Circular */}
       <div
