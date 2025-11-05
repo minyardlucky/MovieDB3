@@ -6,9 +6,19 @@ function Nav({ user, setUser }) {
 
   const handleLogout = () => {
     setUser(null);
-    localStorage.removeItem("token"); // clear JWT
-    localStorage.removeItem("user"); // IMPORTANT: Clear the user object from local storage
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     navigate("/login"); // redirect to login page
+  };
+  
+  // New handler for the unauthenticated Login button
+  const handleLoginClick = () => {
+      navigate("/login");
+  };
+
+  // New handler for the unauthenticated Sign Up button
+  const handleSignUpClick = () => {
+      navigate("/signup");
   };
 
   return (
@@ -62,30 +72,36 @@ function Nav({ user, setUser }) {
           </>
         ) : (
           <>
-            <Link
-              to="/signup"
-              style={{ marginRight: "15px", color: "white", textDecoration: "none" }}
+            {/* Switched Link to Button for Sign Up, using programmatic navigation */}
+            <button
+              onClick={handleSignUpClick}
+              style={{
+                marginRight: "15px", 
+                background: "transparent",
+                color: "white",
+                border: "none",
+                padding: "6px 12px",
+                cursor: "pointer",
+              }}
             >
               Sign Up
-            </Link>
-            {/* 💡 FIX: The Login Link was invisible because it had the same text decoration as its peers. 
-                 It needs to be clearly styled as a primary button for the logged-out state.
-            */}
-            <Link
-              to="/login"
+            </button>
+            
+            {/* Switched Link to Button for Login, using programmatic navigation */}
+            <button
+              onClick={handleLoginClick}
               style={{ 
-                background: "#FFD700", // Bright color
-                color: "#333",          // Dark text
+                background: "#FFD700",
+                color: "#333",
                 border: "none",
                 padding: "6px 12px",
                 cursor: "pointer",
                 borderRadius: "4px",
-                textDecoration: "none", // Remove underline
                 fontWeight: "bold"
               }}
             >
               Login
-            </Link>
+            </button>
           </>
         )}
       </div>
