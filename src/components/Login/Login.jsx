@@ -83,12 +83,33 @@ function Login({ setUser }) {
         }}
         behavior="scroll"
         direction="left"
-        scrollamount="5"
+        scrollamount="8"
       >
         {/* Doubled message content from your request */}
         🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or SignUp and start viewing movie information today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or Sign Up and start viewing movie information today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or Sign Up and start viewing movie information today! 🎬
       </marquee>
-
+     <div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    minHeight: "100vh",
+    width: "100%",
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    paddingTop: '60px',
+    zIndex: 1, // MUST be lower than the NavBar's zIndex
+    
+    // 💡 THE SEARCHLIGHT PROPERTY IS ADDED HERE
+    background: 'radial-gradient(circle at 50% 100%, #1a4773 10%, #001f4d 70%)',
+  }}
+>
+  {/* Login Card (Layer 2) starts inside this div */}
+  <div style={{ /* ... login card styles ... */ }}>
+      {/* ... form content ... */}
+  </div>
+</div>
       {/* 4. Inner div restores the padding for the centered form content */}
       <div style={{ padding: "20px" }}> 
         <h2>Customer Login</h2>
