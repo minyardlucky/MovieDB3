@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Define the keyframes for the pulsing border effect
 const pulseBorderKeyframes = `
   @keyframes pulseYellowBorder {
     0% { border-color: #FFD700; box-shadow: 0 0 5px #FFD700; }
@@ -10,7 +9,6 @@ const pulseBorderKeyframes = `
   }
 `;
 
-// Define keyframes for the sweeping searchlight effect
 const sweepSearchlightKeyframes = `
   @keyframes sweepSearchlight {
     0% { background-position: 0% 50%; }
@@ -70,60 +68,69 @@ function Login({ setUser }) {
   };
 
   return (
-    // 1. Outer div container (no specific styling, just acts as React Fragment replacement)
-    <div style={{ width: "100%", padding: "0" }}>
-      
-      {/* 2. Inject the Keyframes for both the border pulse and the sweeping searchlight */}
+    <div style={{ width: "100%", padding: 0 }}>
       <style>{pulseBorderKeyframes}</style>
       <style>{sweepSearchlightKeyframes}</style>
 
-      {/* Marquee with Pulsing Border (Layer 3) */}
-      <marquee
+      {/* ✅ FIXED MARQUEE WRAPPER ABOVE EVERYTHING */}
+      <div
         style={{
-          color: "#FFD700",
-          backgroundColor: "#333",
-          padding: "20px 0",
-          fontSize: "20px",
-          fontWeight: "bold",
-          border: "6px solid #FFD700", 
-          animation: "pulseYellowBorder 2s infinite alternate", // Starts the pulse effect
+          position: "fixed",
+          top: "66px",
+          width: "100%",
+          zIndex: 10, // ensures it’s above background and login card
         }}
-        behavior="scroll"
-        direction="left"
-        scrollamount="8" // Increased speed for long text
       >
-        🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or SignUp and start viewing movie information today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or Sign Up and start viewing movie information today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or Sign Up and start viewing movie information today! 🎬
-      </marquee>
+        <marquee
+          style={{
+            color: "#FFD700",
+            backgroundColor: "#333",
+            padding: "20px 0",
+            fontSize: "20px",
+            fontWeight: "bold",
+            border: "6px solid #FFD700",
+            animation: "pulseYellowBorder 2s infinite alternate",
+          }}
+          behavior="scroll"
+          direction="left"
+          scrollamount="8"
+        >
+          🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters
+          Information or SignUp and start viewing movie information today! 🎬 🌟
+          Welcome to Lucky's Movie Center! Log in to view the latest blockbusters
+          Information or Sign Up and start viewing movie information today! 🎬 🌟
+          Welcome to Lucky's Movie Center! Log in to view the latest blockbusters
+          Information or Sign Up and start viewing movie information today! 🎬
+        </marquee>
+      </div>
 
-      {/* FIXED BACKGROUND CONTAINER (Layer 1) - Covers page, holds searchlight & form */}
+      {/* 🔦 SEARCHLIGHT BACKGROUND */}
       <div
         style={{
           display: "flex",
           justifyContent: "center",
-          alignItems: "center", // Center vertically in viewport
+          alignItems: "center",
           minHeight: "100vh",
           width: "100%",
-          position: 'fixed',
+          position: "fixed",
           top: 0,
           left: 0,
-          paddingTop: '60px', // Clear space for fixed navbar
-          zIndex: 1, 
-          
-          // 💡 MOVING SEARCHLIGHT BACKGROUND
-          background: 'radial-gradient(circle 500px at 50% 50%, #FFD700, #001f4d)',
-          backgroundSize: '200% 200%', // Allows the gradient to move across a larger area
-          animation: 'sweepSearchlight 15s infinite ease-in-out alternate', // Sweep animation
+          paddingTop: "60px",
+          zIndex: 1, // background layer
+          background: "radial-gradient(circle 500px at 50% 50%, #FFD700, #001f4d)",
+          backgroundSize: "200% 200%",
+          animation: "sweepSearchlight 15s infinite ease-in-out alternate",
         }}
       >
-        {/* LOGIN CARD CONTAINER (Layer 2) - Centered form */}
-        <div 
+        {/* LOGIN CARD */}
+        <div
           style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.7)', // Semi-transparent dark card
-            padding: '30px',
-            borderRadius: '10px',
-            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.5)',
-            zIndex: 2, // Sits above the background (zIndex: 1)
-            color: 'white',
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            padding: "30px",
+            borderRadius: "10px",
+            boxShadow: "0 8px 16px rgba(0, 0, 0, 0.5)",
+            zIndex: 2,
+            color: "white",
             maxWidth: "350px",
             width: "100%",
           }}
@@ -136,7 +143,13 @@ function Login({ setUser }) {
                 type="text"
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
-                style={{ width: "100%", padding: "10px", border: "1px solid #FFD700", borderRadius: "4px", backgroundColor: "rgba(255, 255, 255, 0.1)" }}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  border: "1px solid #FFD700",
+                  borderRadius: "4px",
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                }}
               />
             </div>
             <div style={{ marginBottom: "20px" }}>
@@ -146,27 +159,55 @@ function Login({ setUser }) {
                   type={showPassword ? "text" : "password"}
                   value={passWord}
                   onChange={(e) => setPassWord(e.target.value)}
-                  style={{ flex: 1, padding: "10px", border: "1px solid #FFD700", borderRadius: "4px 0 0 4px", backgroundColor: "rgba(255, 255, 255, 0.1)" }}
+                  style={{
+                    flex: 1,
+                    padding: "10px",
+                    border: "1px solid #FFD700",
+                    borderRadius: "4px 0 0 4px",
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  style={{ padding: "10px 15px", cursor: "pointer", backgroundColor: '#FFD700', color: '#333', border: 'none', borderRadius: "0 4px 4px 0" }}
+                  style={{
+                    padding: "10px 15px",
+                    cursor: "pointer",
+                    backgroundColor: "#FFD700",
+                    color: "#333",
+                    border: "none",
+                    borderRadius: "0 4px 4px 0",
+                  }}
                 >
                   {showPassword ? "Hide" : "Show"}
                 </button>
               </div>
             </div>
-            <button 
-              type="submit" 
-              style={{ padding: "10px 15px", width: "100%", backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+            <button
+              type="submit"
+              style={{
+                padding: "10px 15px",
+                width: "100%",
+                backgroundColor: "#007BFF",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
             >
               Log In
             </button>
           </form>
           {error && <p style={{ color: "#FFD700", marginTop: "15px" }}>{error}</p>}
-          <p style={{ marginTop: '15px', textAlign: 'center' }}>
-            <a href="#" onClick={() => navigate("/signup")} style={{ color: '#FFD700', textDecoration: 'underline' }}>Need an account? Sign Up!</a>
+          <p style={{ marginTop: "15px", textAlign: "center" }}>
+            <a
+              href="#"
+              onClick={() => navigate("/signup")}
+              style={{ color: "#FFD700", textDecoration: "underline" }}
+            >
+              Need an account? Sign Up!
+            </a>
           </p>
         </div>
       </div>
