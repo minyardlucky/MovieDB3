@@ -78,7 +78,7 @@ function Login({ setUser }) {
           fontSize: "20px",
           fontWeight: "bold",
           // 3. Applying the flashing border
-          border: "6px solid #FFD700", // Increased border thickness slightly (from 2px to 3px)
+          border: "6px solid #FFD700", 
           animation: "pulseYellowBorder 2s infinite alternate", // Starts the pulse effect
         }}
         behavior="scroll"
@@ -91,7 +91,7 @@ function Login({ setUser }) {
 
       {/* 4. Inner div restores the padding for the centered form content */}
       <div style={{ padding: "20px" }}> 
-        <h2>Customer Login</h2> 
+        <h2>Customer Login</h2>
         <form onSubmit={handleLogin} style={{ maxWidth: "300px" }}>
           <div style={{ marginBottom: "10px" }}>
             <label>Username</label>

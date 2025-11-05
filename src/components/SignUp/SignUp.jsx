@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 // Constants for the circle effect
 const NUM_REELS = 40; 
-const RADIUS = 250; // Radius for the movie reel chain
+const RADIUS = 280; // Radius for the movie reel chain
 
 // Function to calculate position on a circle
 const getReelStyle = (index) => {
