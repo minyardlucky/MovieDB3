@@ -1,6 +1,14 @@
-// src/components/Login/Login.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+// Define the keyframes for the pulsing effect as a string
+const pulseBorderKeyframes = `
+  @keyframes pulseYellowBorder {
+    0% { border-color: #FFD700; box-shadow: 0 0 5px #FFD700; }
+    50% { border-color: rgba(255, 215, 0, 0.4); box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+    100% { border-color: #FFD700; box-shadow: 0 0 5px #FFD700; }
+  }
+`;
 
 function Login({ setUser }) {
   const [userName, setUserName] = useState("");
@@ -18,6 +26,7 @@ function Login({ setUser }) {
     }
 
     try {
+      // NOTE: Using VITE_API_BASE_URL as provided in the user's snippet
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -53,64 +62,73 @@ function Login({ setUser }) {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      {/* Marquee added here for a scrolling message */}
+    // 1. Outer div set to 100% width to allow the marquee to stretch
+    <div style={{ width: "100%", padding: "0" }}>
+      
+      {/* 2. Inject the Keyframes */}
+      <style>{pulseBorderKeyframes}</style>
+
+      {/* Marquee with Pulsing Border */}
       <marquee
         style={{
-          color: "#FFD700", // Gold-like color, matching your screenshot
-          backgroundColor: "#333", // Dark background for contrast
-          padding: "5px 0",
-          fontSize: "16px",
+          color: "#FFD700",
+          backgroundColor: "#333",
+          // Taller height from your request (15px top/bottom padding)
+          padding: "15px 0",
+          fontSize: "20px",
           fontWeight: "bold",
-          borderTop: "1px solid #FFD700",
-          borderBottom: "1px solid #FFD700",
+          // 3. Applying the flashing border
+          border: "3px solid #FFD700", // Increased border thickness slightly (from 2px to 3px)
+          animation: "pulseYellowBorder 2s infinite alternate", // Starts the pulse effect
         }}
         behavior="scroll"
         direction="left"
         scrollamount="5"
       >
-        🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters and start reserving your tickets today! 🎬
+        {/* Doubled message content from your request */}
+        🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information and start reserving your tickets today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information and start reserving your tickets today! 🎬
       </marquee>
 
-      <h2>Customer Login</h2> 
-      {/* I changed 'Login' to 'Customer Login' to better match the image, feel free to revert if you prefer the old one */}
-      <form onSubmit={handleLogin} style={{ maxWidth: "300px" }}>
-        <div style={{ marginBottom: "10px" }}>
-          <label>Username</label>
-          <input
-            type="text"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            style={{ width: "100%", padding: "8px" }}
-          />
-        </div>
-        <div style={{ marginBottom: "10px" }}>
-          <label>Password</label>
-          <div style={{ display: "flex" }}>
+      {/* 4. Inner div restores the padding for the centered form content */}
+      <div style={{ padding: "20px" }}> 
+        <h2>Customer Login</h2> 
+        <form onSubmit={handleLogin} style={{ maxWidth: "300px" }}>
+          <div style={{ marginBottom: "10px" }}>
+            <label>Username</label>
             <input
-              type={showPassword ? "text" : "password"}
-              value={passWord}
-              onChange={(e) => setPassWord(e.target.value)}
-              style={{ flex: 1, padding: "8px" }}
+              type="text"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              style={{ width: "100%", padding: "8px" }}
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              style={{ marginLeft: "5px", padding: "8px", cursor: "pointer" }}
-            >
-              {showPassword ? "Hide" : "Show"}
-            </button>
           </div>
-        </div>
-        <button type="submit" style={{ padding: "8px 15px" }}>
-          Log In
-        </button>
-      </form>
-      {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
-      {/* Added link to sign up to match your screenshot */}
-      <p style={{ marginTop: '15px' }}>
-          <a href="#" onClick={() => navigate("/signup")} style={{ color: '#FFD700', textDecoration: 'underline' }}>Need an account? Sign Up!</a>
-      </p>
+          <div style={{ marginBottom: "10px" }}>
+            <label>Password</label>
+            <div style={{ display: "flex" }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                value={passWord}
+                onChange={(e) => setPassWord(e.target.value)}
+                style={{ flex: 1, padding: "8px" }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{ marginLeft: "5px", padding: "8px", cursor: "pointer" }}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+          </div>
+          <button type="submit" style={{ padding: "8px 15px" }}>
+            Log In
+          </button>
+        </form>
+        {error && <p style={{ color: "red", marginTop: "10px" }}>{error}</p>}
+        <p style={{ marginTop: '15px' }}>
+            <a href="#" onClick={() => navigate("/signup")} style={{ color: '#FFD700', textDecoration: 'underline' }}>Need an account? Sign Up!</a>
+        </p>
+      </div>
     </div>
   );
 }
