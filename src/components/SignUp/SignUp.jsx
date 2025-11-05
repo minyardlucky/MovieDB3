@@ -1,24 +1,26 @@
-import React, { useState } from "react";
+import React, { useState } from React;
 import { useNavigate } from "react-router-dom";
 
 // Constants for the circle effect
 const NUM_REELS = 40; 
-const RADIUS = 280; // Radius for the movie reel chain
+const RADIUS = 280; // Radius to sit outside the 500px form circle
 
 // Function to calculate position on a circle
 const getReelStyle = (index) => {
-  const angle = (index / NUM_REELS) * 2 * Math.PI; // Angle for the current reel
+  const angle = (index / NUM_REELS) * 2 * Math.PI;
   const x = RADIUS * Math.cos(angle);
   const y = RADIUS * Math.sin(angle);
   
+  // Reels are fixed relative to the screen center
+  // Vertical center adjustment is now relative to the form center point
   return {
-    position: 'fixed', // Set reels to fixed so they don't scroll with content
-    top: `calc(50% + ${y}px)`,
+    position: 'fixed', 
+    top: `calc(50% + ${y}px - 30px)`, // -30px compensates for the nav bar offset
     left: `calc(50% + ${x}px)`,
     transform: 'translate(-50%, -50%)', 
     fontSize: '28px',
     color: '#FFD700', 
-    zIndex: 1, // Lower zIndex so they are behind the form but still visible
+    zIndex: 1, 
   };
 };
 
@@ -76,17 +78,22 @@ function SignUp({ setUser }) {
   };
 
   return (
-    // 1. Full-page container FIXED: Removed position: fixed from this element
-    // ADDED: marginTop to push content below the fixed nav bar (~60px)
+    // FIX: Set main container to fixed position again.
+    // Use top: 0 and left: 0 to align it to the viewport.
+    // Use padding-top to push content down *inside* the fixed container,
+    // ensuring the nav bar area is clear for clicking.
     <div
       style={{
         display: "flex",
         justifyContent: "center",
-        alignItems: "center",
-        minHeight: "calc(100vh - 60px)", // Adjust min-height for nav bar space
+        alignItems: "flex-start", // Change to flex-start to align content below padding-top
+        minHeight: "100vh", 
         width: "100%",
-        marginTop: '60px', // Pushes content down below the nav bar
-        paddingBottom: '20px', // Add padding in case content exceeds view height
+        position: 'fixed', // <-- FORM IS NOW FIXED
+        top: 0,
+        left: 0,
+        paddingTop: '60px', // <-- Pushes content below the nav bar
+        zIndex: 10, // Ensure this fixed element is above everything else, except the nav bar itself
       }}
     >
       
@@ -100,15 +107,16 @@ function SignUp({ setUser }) {
           height: '500px', 
           display: 'flex', 
           flexDirection: 'column',
-          justifyContent: 'center',
+          // Center the form content vertically within the 500px circle
+          justifyContent: 'center', 
           alignItems: 'center',
           boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
-          zIndex: 2, // Kept at zIndex 2
+          zIndex: 2, // Ensure form is above reels
           textAlign: 'center', 
         }}
       >
         <h2>Sign Up</h2>
-        {/* Form content width limited so it fits inside the circle */}
+        {/* Form content */}
         <form onSubmit={handleSignUp} style={{ width: '80%', maxWidth: '300px' }}> 
           <div style={{ marginBottom: "15px" }}>
             <label style={{ display: "block", marginBottom: "5px" }}>First Name</label>
@@ -190,7 +198,7 @@ function SignUp({ setUser }) {
         {error && <p style={{ color: "red", marginTop: "15px" }}>{error}</p>}
       </div>
       
-      {/* 3. Movie Reel Icons (🎞️) - Position is fixed via getReelStyle now */}
+      {/* 3. Movie Reel Icons */}
       {[...Array(NUM_REELS)].map((_, index) => (
         <div key={index} style={getReelStyle(index)}>
           🎞️
