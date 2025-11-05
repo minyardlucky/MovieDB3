@@ -93,7 +93,7 @@ function Login({ setUser }) {
           }}
           behavior="scroll"
           direction="left"
-          scrollamount="8"
+          scrollamount="10"
         >
           🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters
           Information or SignUp and start viewing movie information today! 🎬 🌟
