@@ -78,7 +78,7 @@ function Login({ setUser }) {
           fontSize: "20px",
           fontWeight: "bold",
           // 3. Applying the flashing border
-          border: "3px solid #FFD700", // Increased border thickness slightly (from 2px to 3px)
+          border: "6px solid #FFD700", // Increased border thickness slightly (from 2px to 3px)
           animation: "pulseYellowBorder 2s infinite alternate", // Starts the pulse effect
         }}
         behavior="scroll"
@@ -86,7 +86,7 @@ function Login({ setUser }) {
         scrollamount="5"
       >
         {/* Doubled message content from your request */}
-        🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information and start reserving your tickets today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information and start reserving your tickets today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information and start reserving your tickets today! 🎬
+        🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or SignUp and start reserving your tickets today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or Sign Up and start reserving your tickets today! 🎬 🌟 Welcome to Lucky's Movie Center! Log in to view the latest blockbusters Information or Sign Up and start reserving your tickets today! 🎬
       </marquee>
 
       {/* 4. Inner div restores the padding for the centered form content */}
