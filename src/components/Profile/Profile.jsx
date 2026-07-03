@@ -35,7 +35,7 @@ function Profile({ user }) {
           <strong>Full Name:</strong> {user.firstName} {user.lastName}
         </p>
         <p>
-          <strong>Username:</strong> {user.userName}
+          <strong>Username:</strong> {user.username}
         </p>
         <p>
           <strong>Email:</strong> {user.email}
@@ -46,3 +46,4 @@ function Profile({ user }) {
 }
 
 export default Profile;
+
