@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const pulseBorderKeyframes = `
@@ -23,6 +23,14 @@ function Login({ setUser }) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  // Clear browser autofill on mount
+  useEffect(() => {
+    const inputs = document.querySelectorAll("input[type='text'], input[type='password']");
+    inputs.forEach(input => {
+      input.value = "";
+    });
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -78,7 +86,7 @@ function Login({ setUser }) {
           position: "fixed",
           top: "66px",
           width: "100%",
-          zIndex: 10, // ensures it’s above background and login card
+          zIndex: 10, // ensures it's above background and login card
         }}
       >
         <marquee
@@ -144,6 +152,7 @@ function Login({ setUser }) {
         type="text"
         value={userName}
         onChange={(e) => setUserName(e.target.value)}
+        autoComplete="off"
         style={{
           width: "100%",
           padding: "10px",
@@ -162,6 +171,7 @@ function Login({ setUser }) {
           type={showPassword ? "text" : "password"}
           value={passWord}
           onChange={(e) => setPassWord(e.target.value)}
+          autoComplete="off"
           style={{
             flex: 1,
             padding: "10px",
@@ -225,3 +235,4 @@ function Login({ setUser }) {
 }
 
 export default Login;
+
