@@ -24,12 +24,38 @@ function Login({ setUser }) {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Clear browser autofill on mount
+  // Clear browser autofill on mount and prevent it
   useEffect(() => {
+    // Clear inputs immediately
+    const clearInputs = () => {
+      const inputs = document.querySelectorAll("input[type='text'], input[type='password']");
+      inputs.forEach(input => {
+        input.value = "";
+        input.setAttribute("autocomplete", "off");
+      });
+    };
+
+    clearInputs();
+    
+    // Clear again after a short delay to catch delayed autofill
+    const timer = setTimeout(clearInputs, 100);
+    
+    // Prevent autofill on input focus
+    const handleFocus = (e) => {
+      e.target.value = "";
+    };
+    
     const inputs = document.querySelectorAll("input[type='text'], input[type='password']");
     inputs.forEach(input => {
-      input.value = "";
+      input.addEventListener("focus", handleFocus);
     });
+
+    return () => {
+      clearTimeout(timer);
+      inputs.forEach(input => {
+        input.removeEventListener("focus", handleFocus);
+      });
+    };
   }, []);
 
   const handleLogin = async (e) => {
@@ -145,7 +171,7 @@ function Login({ setUser }) {
   }}
 >
   <h2 style={{ color: "#FFD700", marginBottom: "20px" }}>Customer Login</h2>
-  <form onSubmit={handleLogin}>
+  <form onSubmit={handleLogin} autoComplete="off">
     <div style={{ marginBottom: "15px" }}>
       <label style={{ display: "block", marginBottom: "5px" }}>Username</label>
       <input
@@ -153,6 +179,7 @@ function Login({ setUser }) {
         value={userName}
         onChange={(e) => setUserName(e.target.value)}
         autoComplete="off"
+        spellCheck="false"
         style={{
           width: "100%",
           padding: "10px",
@@ -171,7 +198,8 @@ function Login({ setUser }) {
           type={showPassword ? "text" : "password"}
           value={passWord}
           onChange={(e) => setPassWord(e.target.value)}
-          autoComplete="off"
+          autoComplete="new-password"
+          spellCheck="false"
           style={{
             flex: 1,
             padding: "10px",
